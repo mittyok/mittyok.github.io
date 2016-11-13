@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>https://mittyok.github.io/2016/11/13/Spring-Cloud-Config/</loc>
+    
+    <lastmod>2016-11-13T11:40:10.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mittyok.github.io/2016/10/01/Log4jdbc-Guide/</loc>
+    
+    <lastmod>2016-10-01T14:24:08.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mittyok.github.io/2016/10/01/jpa-schema-maven-plugin-guide/</loc>
+    
+    <lastmod>2016-10-01T09:20:46.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mittyok.github.io/2016/09/24/spring-cloud-introduction/</loc>
+    
+    <lastmod>2016-09-25T13:13:50.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mittyok.github.io/categories/index.html</loc>
+    
+    <lastmod>2016-09-24T15:00:36.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mittyok.github.io/tags/index.html</loc>
+    
+    <lastmod>2016-09-24T15:00:16.000Z</lastmod>
+    
+  </url>
+  
+</urlset>
