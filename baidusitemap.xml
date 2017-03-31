@@ -4,6 +4,115 @@
 
     
   <url>
+    <loc>https://mittyok.github.io/2016/12/28/Spring%20cloud%20stream%20binder%20rabbitmq/</loc>
+    <lastmod>2016-12-28T09:23:31.000Z</lastmod>
+    <data>
+        <display>
+        <title>Spring cloud stream binder rabbitmq</title>
+        <pubTime>2016-12-28T06:48:15.000Z</pubTime>
+        
+        <tag>rabbitmq</tag>
+         
+        <tag>spring cloud stream</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://mittyok.github.io/2016/12/28/RabbitMQ%E6%80%A7%E8%83%BD%E5%8F%8A%E6%89%A9%E5%B1%95%E6%80%A7%E7%9A%84%E6%8F%90%E5%8D%87-%E8%B7%AF%E7%94%B1%E6%8B%93%E6%89%91%E7%BB%93%E6%9E%84/</loc>
+    <lastmod>2016-12-28T07:02:43.000Z</lastmod>
+    <data>
+        <display>
+        <title>RabbitMQ性能及扩展性的提升-路由拓扑结构</title>
+        <pubTime>2016-12-28T06:48:15.000Z</pubTime>
+        
+        <tag>rabbitmq</tag>
+         
+        <tag>performance</tag>
+         
+        <tag>routing</tag>
+         
+        <tag>scalability</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://mittyok.github.io/2016/12/02/Axon_Framework_%E4%BB%8B%E7%BB%8D/</loc>
+    <lastmod>2016-12-28T02:31:02.000Z</lastmod>
+    <data>
+        <display>
+        <title>Axon Framework 介绍</title>
+        <pubTime>2016-12-02T02:35:15.000Z</pubTime>
+        
+        <tag>axon framework</tag>
+         
+        <tag>event sourcing</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://mittyok.github.io/2016/12/02/spring-cloud-dataflow-%E5%85%A5%E9%97%A8/</loc>
+    <lastmod>2016-12-15T07:13:45.000Z</lastmod>
+    <data>
+        <display>
+        <title>spring cloud dataflow 入门</title>
+        <pubTime>2016-12-02T02:35:15.000Z</pubTime>
+        
+        <tag>spring cloud</tag>
+         
+        <tag>dataflow</tag>
+         
+        <tag>task</tag>
+         
+        <tag>batch</tag>
+         
+        <tag>job</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://mittyok.github.io/2016/12/09/Resizing%20a%20VirtualBox%20Virtual%20Machine%20(Debian)%20hard%20disk%20with%20LVM/</loc>
+    <lastmod>2016-12-09T09:39:34.000Z</lastmod>
+    <data>
+        <display>
+        <title>Resizing a VirtualBox Virtual Machine (Debian) hard disk with LVM</title>
+        <pubTime>2016-12-09T07:20:15.000Z</pubTime>
+        
+        <tag>virtualbox</tag>
+         
+        <tag>resize</tag>
+         
+        <tag>hard disk</tag>
+         
+        <tag>lvm</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://mittyok.github.io/2016/11/24/%E8%80%B3%E6%9C%BA%E7%85%B2%E6%9C%BA%E6%8A%80%E5%B7%A7/</loc>
     <lastmod>2016-11-24T02:19:55.000Z</lastmod>
     <data>
@@ -135,6 +244,36 @@
           
              
               <breadCrumb title="ddl" url="https://mittyok.github.io/categories/maven/ddl/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://mittyok.github.io/2016/09/24/spring-cloud-introduction%E7%9A%84%E5%89%AF%E6%9C%AC/</loc>
+    <lastmod>2016-09-25T13:13:50.000Z</lastmod>
+    <data>
+        <display>
+        <title>spring_cloud_introduction</title>
+        <pubTime>2016-09-24T08:04:17.000Z</pubTime>
+        
+        <tag>spring cloud</tag>
+         
+        <tag>spring</tag>
+         
+        <tag>spring boot</tag>
+         
+        <tag>eureka</tag>
+         
+        <tag>netflix</tag>
+         
+        <tag>zuul</tag>
+         
+         
+           
+             
+              <breadCrumb title="spring cloud" url="https://mittyok.github.io/categories/spring-cloud/"/>
           
         </display>
     </data>
