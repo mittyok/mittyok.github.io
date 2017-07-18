@@ -151,27 +151,57 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-Spring cloud stream binder rabbitmq" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-Fluentd vs Logstash" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/28/Spring cloud stream binder rabbitmq/">Spring cloud stream binder rabbitmq</a>
+      <a class="article-title" href="/2017/07/18/Fluentd vs Logstash/">Fluentd vs Logstash</a>
     </h1>
   
 
         
-        <a href="/2016/12/28/Spring cloud stream binder rabbitmq/" class="archive-article-date">
-  	<time datetime="2016-12-28T06:48:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-28</time>
+        <a href="/2017/07/18/Fluentd vs Logstash/" class="archive-article-date">
+  	<time datetime="2017-07-18T01:05:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-18</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;spring-cloud-stream-binder-rabbit&lt;/artifactId&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;spring-cloud-stream&lt;/artifactId&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+        <p>说起Logstash，大家可能略显生疏，但是说起ELK，大家应该再熟悉不过。所谓的ELK及Elasticsearch，Logstash，Kibana。在Panda Strike公司，他们使用了ELK工具，他们有自己的Elasticsearch集群，但是逐渐的，他们去掉了Logstash，而是使用了Fluentd替换了Logstash，称其为EFK，虽然听起来挺拗口的，但是我们还是看一下他们为什么要这么做。</p>
+<h2 id="Why"><a href="#Why" class="headerlink" title="Why"></a>Why</h2><p>首先呢，Fluentd和Logstash均提供了日志处理（Log shipper）和转发（Log forwarder）的功能。Wikipedia中对log shipping有定义：</p>
+<p>  log shipping “is the process of automating the backup of a database and transaction log files on a primary (production) database server, and then restoring them onto a standby server.”</p>
+<p>对log forwarder也有定义：</p>
+<p>   log forwarder “is a forestry vehicle that carries big felled logs from the stump to a roadside landing.”<br>单单根据定义，我们无法看出两者的差别，因此，在严格的线上产品中，我们宁可什么也不用，也不能根据维基的定义来引入框架。</p>
+<p>尽管如此，Panda Strike选择了另外的定义：</p>
+<p>  Log shipper在现代的devops中是一个必要的组件，因为日志是流，而不是文件。<br>  Log forwarder是吧日志事件发送给Log shipper。作为forwarder，它的任务就是把上游的日志事件尽可能快的发送出去，而shipper会决定如何处理和路由这些事件。Shipper有可能会对事件做一些聚合操作，或者直接发送给远端的存储或者分析工具。</p>
+<p>Fluentd和Logstash有一些共同的特性，而且对于部分特性的支持非常的类似：</p>
+<ul>
+<li>都可以给不同的层提供必要的功能</li>
+<li>在任何时候，forwarders都能够检测和发现失败的shipper，进而切换到另一个可用的shipper</li>
+<li>都可以转发日志事件到不同的接收者，比如说：SQS、Elasticsearch、S3等</li>
+<li>都原生支持JSON格式的log事件</li>
+<li>目前都在有人维护和开发，并且都有企业资助</li>
+<li>都使用的插件架构，并且都有自己的插件管理工具</li>
+<li>都支持日志事件的过滤，转换，同时插件的数量上也趋于相近</li>
+</ul>
+<p>Fluentd主要是用Ruby写的，有一些性能敏感的部分是用C写的，同时有一个方便的、稳定的预编译版本可用。Fluentd还用一个用Go写的forwarder。Logstash的fowwarder也是用Go写的，但是它的shipper是运行在JRuby上的，这就需要JVM的支持。这种依赖我们觉得对log shipping来说是一种比较重的依赖。</p>
+<p>在其他方面也有一些差别：</p>
+<ul>
+<li>可靠性、持久性、故障恢复</li>
+<li>可调优性，数据的flush间隔，工作线程的一些配置等</li>
+<li>内存和CPU的一些需求（对我们而言，就这一点Fluentd就轻松的胜出了）</li>
+</ul>
+<p>再来一个删节版的输出看一下：</p>
+<h1 id="LOGSTASH-FORWARDER"><a href="#LOGSTASH-FORWARDER" class="headerlink" title="LOGSTASH FORWARDER"></a>LOGSTASH FORWARDER</h1><p>  $ ps fauxwww –sort -rss |awk ‘/(USER|logstash-forwarder)/ { print }’<br>  %CPU %MEM<br>  0.0  0.7</p>
+<h1 id="LOGSTASH-SHIPPER"><a href="#LOGSTASH-SHIPPER" class="headerlink" title="LOGSTASH SHIPPER"></a>LOGSTASH SHIPPER</h1><p>  ps fauxwww –sort -rss |awk ‘/(USER|logstash)/ { print }’<br>  %CPU %MEM<br>  4.8 20.9</p>
+<h1 id="FLUENTD-FORWARDER"><a href="#FLUENTD-FORWARDER" class="headerlink" title="FLUENTD FORWARDER"></a>FLUENTD FORWARDER</h1><p>  ps fauxwww –sort -rss |awk ‘$1 ~ /(USER|td-agent)/ { print }’<br>  %CPU %MEM<br>  0.0  2.3<br>  0.1  4.5</p>
+<h1 id="FLUENTD-SHIPPER"><a href="#FLUENTD-SHIPPER" class="headerlink" title="FLUENTD SHIPPER"></a>FLUENTD SHIPPER</h1><p>  ps fauxwww –sort -rss |awk ‘$1 ~ /(USER|td-agent)/ { print }’<br>  %CPU %MEM<br>  0.0  2.3<br>  0.2  7.3</p>
+<p>这些数据完全来自我们的生产环境，不是基于某些方面的一些基准测试。从数据上看，Logstash的forwarder明显胜出了Fluentd的Forwarder。但是Fluentd的shipper的表现要远远好于Logstash的shipper，并且在对Logstash令人失望的经验之后，Fluentd使用起来更容易，更可靠。</p>
+
       
 
       
@@ -184,11 +214,19 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">rabbitmq</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Fluted</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">spring cloud stream</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ELK</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Logstash</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Log</a>
         		</li>
       		
 		</ul>
@@ -198,7 +236,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2016/12/28/Spring cloud stream binder rabbitmq/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/07/18/Fluentd vs Logstash/">展开全文 >></a>
         </p>
       
 
@@ -293,6 +331,71 @@
 
 
   
+    <article id="post-Spring cloud stream binder rabbitmq" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/28/Spring cloud stream binder rabbitmq/">Spring cloud stream binder rabbitmq</a>
+    </h1>
+  
+
+        
+        <a href="/2016/12/28/Spring cloud stream binder rabbitmq/" class="archive-article-date">
+  	<time datetime="2016-12-28T06:48:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-28</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;spring-cloud-stream-binder-rabbit&lt;/artifactId&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;spring-cloud-stream&lt;/artifactId&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">rabbitmq</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">spring cloud stream</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/12/28/Spring cloud stream binder rabbitmq/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-Resizing a VirtualBox Virtual Machine (Debian) hard disk with LVM" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -363,6 +466,79 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2016/12/09/Resizing a VirtualBox Virtual Machine (Debian) hard disk with LVM/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Axon_Framework_介绍" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/02/Axon_Framework_介绍/">Axon Framework 介绍</a>
+    </h1>
+  
+
+        
+        <a href="/2016/12/02/Axon_Framework_介绍/" class="archive-article-date">
+  	<time datetime="2016-12-02T02:35:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Axon Framework设计最初的想法，就是设计一个框架，能够帮助开发者解决应用的可扩展和可伸缩性，使开发者不用太关心太多的技术细节，而是把这些事情交由框架本身来关心。</p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><h3 id="历史"><a href="#历史" class="headerlink" title="历史"></a>历史</h3><p>随着时间的前行，我们发现，软件产品的需求，无论是功能性的还是非功能性的都在快速的增长。企业不再仅仅是通过宣传册来大力宣传业务，更希望他们的产品能够与业务与时俱进。这不仅仅意味着项目和代码可能会越来越复杂，更意味着软件的功能设计要不断的增加、改变甚至移除。最令人心烦的是，有时候表面上看起来非常容易实现的一个特性，却需要开发团队对整个应用拆分和理解。而且，当今的网络应用的目标都是能应对几十亿的潜在用户，这就使得可扩展性成为一个不可争辩的一个需求。</p>
+<p>目前已经有很多的应用和框架在尝试解决应用的可扩展性问题，比如：GigaSpaces、Terracotta，但是这些框架有一个明显的问题，他们在尝试解决问题的同时，让开发者依然使用开发者熟悉的分层架构，在某些情况下，甚至限制和阻止开发者使用一个真正的域模型，强迫开发者将所有的业务逻辑放入业务层中。尽管这样做可以很快的搭建起一个应用，但是慢慢的会导致应用越来越复杂，开发越来越慢。</p>
+<p>Greg Young第一次提到了Command Query Responsiblity Segregation (CQRS)模式，通过改变应用的架构来解决这些问题。CQRS并不通过层来划分业务，而是基于读或者写来划分业务。这就意味着执行写的组件和执行读的组件是完全分开的。这样做的一个很重要的原因是应用的读和写对技术的或者是非技术的需求是完全不同的。Command执行后，查询组件会使用特定的事件进行同步或者异步的更新操作。正是这种通过事件更新的机制使得应用在框架上更容易延伸和扩展，最终也会更利于维护。</p>
+<blockquote>
+<p><img src="http://ogj4ygzvp.bkt.clouddn.com/note.png" alt="">Note：这里我们不会花大部分时间来讲CQRS，如果你想更多的了解CQRS，可以访问这里：<a href="http://www.axonframework.org/" target="_blank" rel="external">www.axonframework.org</a>，这里有一些背景介绍的一些链接。</p>
+</blockquote>
+<p>可以看到，CQRS与我们当今主流的开发结构有很大的差距，自然就很难理解。对于开发者而言，学习使用这种架构走一些弯路就再正常不过了。这也正是Axon Framework诞生的初衷：帮助开发者轻松的事项CQRS模式，从而把更多的时间和精力花在实际业务上。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">axon framework</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">event sourcing</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/12/02/Axon_Framework_介绍/">展开全文 >></a>
         </p>
       
 
@@ -472,79 +648,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2016/12/02/spring-cloud-dataflow-入门/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-Axon_Framework_介绍" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/02/Axon_Framework_介绍/">Axon Framework 介绍</a>
-    </h1>
-  
-
-        
-        <a href="/2016/12/02/Axon_Framework_介绍/" class="archive-article-date">
-  	<time datetime="2016-12-02T02:35:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Axon Framework设计最初的想法，就是设计一个框架，能够帮助开发者解决应用的可扩展和可伸缩性，使开发者不用太关心太多的技术细节，而是把这些事情交由框架本身来关心。</p>
-<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><h3 id="历史"><a href="#历史" class="headerlink" title="历史"></a>历史</h3><p>随着时间的前行，我们发现，软件产品的需求，无论是功能性的还是非功能性的都在快速的增长。企业不再仅仅是通过宣传册来大力宣传业务，更希望他们的产品能够与业务与时俱进。这不仅仅意味着项目和代码可能会越来越复杂，更意味着软件的功能设计要不断的增加、改变甚至移除。最令人心烦的是，有时候表面上看起来非常容易实现的一个特性，却需要开发团队对整个应用拆分和理解。而且，当今的网络应用的目标都是能应对几十亿的潜在用户，这就使得可扩展性成为一个不可争辩的一个需求。</p>
-<p>目前已经有很多的应用和框架在尝试解决应用的可扩展性问题，比如：GigaSpaces、Terracotta，但是这些框架有一个明显的问题，他们在尝试解决问题的同时，让开发者依然使用开发者熟悉的分层架构，在某些情况下，甚至限制和阻止开发者使用一个真正的域模型，强迫开发者将所有的业务逻辑放入业务层中。尽管这样做可以很快的搭建起一个应用，但是慢慢的会导致应用越来越复杂，开发越来越慢。</p>
-<p>Greg Young第一次提到了Command Query Responsiblity Segregation (CQRS)模式，通过改变应用的架构来解决这些问题。CQRS并不通过层来划分业务，而是基于读或者写来划分业务。这就意味着执行写的组件和执行读的组件是完全分开的。这样做的一个很重要的原因是应用的读和写对技术的或者是非技术的需求是完全不同的。Command执行后，查询组件会使用特定的事件进行同步或者异步的更新操作。正是这种通过事件更新的机制使得应用在框架上更容易延伸和扩展，最终也会更利于维护。</p>
-<blockquote>
-<p><img src="http://ogj4ygzvp.bkt.clouddn.com/note.png" alt="">Note：这里我们不会花大部分时间来讲CQRS，如果你想更多的了解CQRS，可以访问这里：<a href="http://www.axonframework.org/" target="_blank" rel="external">www.axonframework.org</a>，这里有一些背景介绍的一些链接。</p>
-</blockquote>
-<p>可以看到，CQRS与我们当今主流的开发结构有很大的差距，自然就很难理解。对于开发者而言，学习使用这种架构走一些弯路就再正常不过了。这也正是Axon Framework诞生的初衷：帮助开发者轻松的事项CQRS模式，从而把更多的时间和精力花在实际业务上。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">axon framework</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">event sourcing</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/12/02/Axon_Framework_介绍/">展开全文 >></a>
         </p>
       
 
@@ -910,89 +1013,6 @@
 
 
   
-    <article id="post-Log4jdbc-Guide" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/01/Log4jdbc-Guide/">Log4jdbc-Guide</a>
-    </h1>
-  
-
-        
-        <a href="/2016/10/01/Log4jdbc-Guide/" class="archive-article-date">
-  	<time datetime="2016-10-01T13:47:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-10-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>基于Springboot 1.4</p>
-</blockquote>
-<h2 id="配置依赖"><a href="#配置依赖" class="headerlink" title="配置依赖"></a>配置依赖</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.bgee.log4jdbc-log4j2/log4jdbc-log4j2 --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.bgee.log4jdbc-log4j2<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>log4jdbc-log4j2-jdbc4.1<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.16<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div></pre></td></tr></table></figure>
-<h2 id="配置驱动"><a href="#配置驱动" class="headerlink" title="配置驱动"></a>配置驱动</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">spring.datasource.driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy</div></pre></td></tr></table></figure>
-<h2 id="配置Log探测器"><a href="#配置Log探测器" class="headerlink" title="配置Log探测器"></a>配置Log探测器</h2><p>在classpath下建一个文件，命名为：<em>log4jdbc.log4j2.properties</em>。添加如下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">log4jdbc.spylogdelegator.name=net.sf.log4jdbc.log.slf4j.Slf4jSpyLogDelegator</div></pre></td></tr></table></figure></p>
-<p>OK啦，启动吧，现在应该有效果了。</p>
-<p><strong>太详细的，大家再到网上看一下吧。。。</strong></p>
-<p><strong><em>需要注意的一些日志配置</em></strong><br>Log4jdbc 用以下几个可以配置的日志种类：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">jdbc.sqlonly : 仅记录 SQL</div><div class="line">jdbc.sqltiming ：记录 SQL 以及耗时信息</div><div class="line">jdbc.audit ：记录除了 ResultSet 之外的所有 JDBC 调用信息，会产生大量的记录，有利于调试跟踪具体的 JDBC 问题</div><div class="line">jdbc.resultset ：会产生更多的记录信息，因为记录了 ResultSet 的信息</div><div class="line">jdbc.connection ：记录连接打开、关闭等信息，有利于调试数据库连接相关问题</div></pre></td></tr></table></figure></p>
-<p>配置形式可参考如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">log4j.logger.jdbc.sqlonly=OFF</div><div class="line">log4j.logger.jdbc.sqltiming=INFO</div><div class="line">log4j.logger.jdbc.audit=OFF</div><div class="line">log4j.logger.jdbc.resultset=OFF</div><div class="line">log4j.logger.jdbc.connection=OFF</div></pre></td></tr></table></figure></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">log4j</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">sql</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">tuning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">springboot</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/10/01/Log4jdbc-Guide/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1239,6 +1259,22 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">煲机</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Fluted</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ELK</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Logstash</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Log</a>
               </li>
             
             <div class="clearfix"></div>

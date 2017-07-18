@@ -4,9 +4,39 @@
   
     
     <entry>
-      <title><![CDATA[Spring cloud stream binder rabbitmq]]></title>
-      <url>https://mittyok.github.io/2016/12/28/Spring%20cloud%20stream%20binder%20rabbitmq/</url>
-      <content type="html"><![CDATA[<h2 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;spring-cloud-stream-binder-rabbit&lt;/artifactId&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;spring-cloud-stream&lt;/artifactId&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>]]></content>
+      <title><![CDATA[Fluentd vs Logstash]]></title>
+      <url>https://mittyok.github.io/2017/07/18/Fluentd%20vs%20Logstash/</url>
+      <content type="html"><![CDATA[<p>说起Logstash，大家可能略显生疏，但是说起ELK，大家应该再熟悉不过。所谓的ELK及Elasticsearch，Logstash，Kibana。在Panda Strike公司，他们使用了ELK工具，他们有自己的Elasticsearch集群，但是逐渐的，他们去掉了Logstash，而是使用了Fluentd替换了Logstash，称其为EFK，虽然听起来挺拗口的，但是我们还是看一下他们为什么要这么做。</p>
+<h2 id="Why"><a href="#Why" class="headerlink" title="Why"></a>Why</h2><p>首先呢，Fluentd和Logstash均提供了日志处理（Log shipper）和转发（Log forwarder）的功能。Wikipedia中对log shipping有定义：</p>
+<p>  log shipping “is the process of automating the backup of a database and transaction log files on a primary (production) database server, and then restoring them onto a standby server.”</p>
+<p>对log forwarder也有定义：</p>
+<p>   log forwarder “is a forestry vehicle that carries big felled logs from the stump to a roadside landing.”<br>单单根据定义，我们无法看出两者的差别，因此，在严格的线上产品中，我们宁可什么也不用，也不能根据维基的定义来引入框架。</p>
+<p>尽管如此，Panda Strike选择了另外的定义：</p>
+<p>  Log shipper在现代的devops中是一个必要的组件，因为日志是流，而不是文件。<br>  Log forwarder是吧日志事件发送给Log shipper。作为forwarder，它的任务就是把上游的日志事件尽可能快的发送出去，而shipper会决定如何处理和路由这些事件。Shipper有可能会对事件做一些聚合操作，或者直接发送给远端的存储或者分析工具。</p>
+<p>Fluentd和Logstash有一些共同的特性，而且对于部分特性的支持非常的类似：</p>
+<ul>
+<li>都可以给不同的层提供必要的功能</li>
+<li>在任何时候，forwarders都能够检测和发现失败的shipper，进而切换到另一个可用的shipper</li>
+<li>都可以转发日志事件到不同的接收者，比如说：SQS、Elasticsearch、S3等</li>
+<li>都原生支持JSON格式的log事件</li>
+<li>目前都在有人维护和开发，并且都有企业资助</li>
+<li>都使用的插件架构，并且都有自己的插件管理工具</li>
+<li>都支持日志事件的过滤，转换，同时插件的数量上也趋于相近</li>
+</ul>
+<p>Fluentd主要是用Ruby写的，有一些性能敏感的部分是用C写的，同时有一个方便的、稳定的预编译版本可用。Fluentd还用一个用Go写的forwarder。Logstash的fowwarder也是用Go写的，但是它的shipper是运行在JRuby上的，这就需要JVM的支持。这种依赖我们觉得对log shipping来说是一种比较重的依赖。</p>
+<p>在其他方面也有一些差别：</p>
+<ul>
+<li>可靠性、持久性、故障恢复</li>
+<li>可调优性，数据的flush间隔，工作线程的一些配置等</li>
+<li>内存和CPU的一些需求（对我们而言，就这一点Fluentd就轻松的胜出了）</li>
+</ul>
+<p>再来一个删节版的输出看一下：</p>
+<h1 id="LOGSTASH-FORWARDER"><a href="#LOGSTASH-FORWARDER" class="headerlink" title="LOGSTASH FORWARDER"></a>LOGSTASH FORWARDER</h1><p>  $ ps fauxwww –sort -rss |awk ‘/(USER|logstash-forwarder)/ { print }’<br>  %CPU %MEM<br>  0.0  0.7</p>
+<h1 id="LOGSTASH-SHIPPER"><a href="#LOGSTASH-SHIPPER" class="headerlink" title="LOGSTASH SHIPPER"></a>LOGSTASH SHIPPER</h1><p>  ps fauxwww –sort -rss |awk ‘/(USER|logstash)/ { print }’<br>  %CPU %MEM<br>  4.8 20.9</p>
+<h1 id="FLUENTD-FORWARDER"><a href="#FLUENTD-FORWARDER" class="headerlink" title="FLUENTD FORWARDER"></a>FLUENTD FORWARDER</h1><p>  ps fauxwww –sort -rss |awk ‘$1 ~ /(USER|td-agent)/ { print }’<br>  %CPU %MEM<br>  0.0  2.3<br>  0.1  4.5</p>
+<h1 id="FLUENTD-SHIPPER"><a href="#FLUENTD-SHIPPER" class="headerlink" title="FLUENTD SHIPPER"></a>FLUENTD SHIPPER</h1><p>  ps fauxwww –sort -rss |awk ‘$1 ~ /(USER|td-agent)/ { print }’<br>  %CPU %MEM<br>  0.0  2.3<br>  0.2  7.3</p>
+<p>这些数据完全来自我们的生产环境，不是基于某些方面的一些基准测试。从数据上看，Logstash的forwarder明显胜出了Fluentd的Forwarder。但是Fluentd的shipper的表现要远远好于Logstash的shipper，并且在对Logstash令人失望的经验之后，Fluentd使用起来更容易，更可靠。</p>
+]]></content>
     </entry>
     
     <entry>
@@ -17,6 +47,12 @@
 </blockquote>
 <p>为了实现系统的高伸缩性，我们需要设计一个合适的路由拓扑。我们需要考虑很多的细节，比如：消息实现环境中存在的问题及限制，性能策略等。</p>
 ]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Spring cloud stream binder rabbitmq]]></title>
+      <url>https://mittyok.github.io/2016/12/28/Spring%20cloud%20stream%20binder%20rabbitmq/</url>
+      <content type="html"><![CDATA[<h2 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;spring-cloud-stream-binder-rabbit&lt;/artifactId&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;spring-cloud-stream&lt;/artifactId&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>]]></content>
     </entry>
     
     <entry>
@@ -36,6 +72,20 @@
 <blockquote>
 <p>大家可以看下这里学习一下：<br><a href="https://wiki.archlinux.org/index.php/LVM_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87" target="_blank" rel="external">LVM相关介绍</a>)</p>
 </blockquote>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Axon Framework 介绍]]></title>
+      <url>https://mittyok.github.io/2016/12/02/Axon_Framework_%E4%BB%8B%E7%BB%8D/</url>
+      <content type="html"><![CDATA[<p>Axon Framework设计最初的想法，就是设计一个框架，能够帮助开发者解决应用的可扩展和可伸缩性，使开发者不用太关心太多的技术细节，而是把这些事情交由框架本身来关心。</p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><h3 id="历史"><a href="#历史" class="headerlink" title="历史"></a>历史</h3><p>随着时间的前行，我们发现，软件产品的需求，无论是功能性的还是非功能性的都在快速的增长。企业不再仅仅是通过宣传册来大力宣传业务，更希望他们的产品能够与业务与时俱进。这不仅仅意味着项目和代码可能会越来越复杂，更意味着软件的功能设计要不断的增加、改变甚至移除。最令人心烦的是，有时候表面上看起来非常容易实现的一个特性，却需要开发团队对整个应用拆分和理解。而且，当今的网络应用的目标都是能应对几十亿的潜在用户，这就使得可扩展性成为一个不可争辩的一个需求。</p>
+<p>目前已经有很多的应用和框架在尝试解决应用的可扩展性问题，比如：GigaSpaces、Terracotta，但是这些框架有一个明显的问题，他们在尝试解决问题的同时，让开发者依然使用开发者熟悉的分层架构，在某些情况下，甚至限制和阻止开发者使用一个真正的域模型，强迫开发者将所有的业务逻辑放入业务层中。尽管这样做可以很快的搭建起一个应用，但是慢慢的会导致应用越来越复杂，开发越来越慢。</p>
+<p>Greg Young第一次提到了Command Query Responsiblity Segregation (CQRS)模式，通过改变应用的架构来解决这些问题。CQRS并不通过层来划分业务，而是基于读或者写来划分业务。这就意味着执行写的组件和执行读的组件是完全分开的。这样做的一个很重要的原因是应用的读和写对技术的或者是非技术的需求是完全不同的。Command执行后，查询组件会使用特定的事件进行同步或者异步的更新操作。正是这种通过事件更新的机制使得应用在框架上更容易延伸和扩展，最终也会更利于维护。</p>
+<blockquote>
+<p><img src="http://ogj4ygzvp.bkt.clouddn.com/note.png" alt="">Note：这里我们不会花大部分时间来讲CQRS，如果你想更多的了解CQRS，可以访问这里：<a href="http://www.axonframework.org/" target="_blank" rel="external">www.axonframework.org</a>，这里有一些背景介绍的一些链接。</p>
+</blockquote>
+<p>可以看到，CQRS与我们当今主流的开发结构有很大的差距，自然就很难理解。对于开发者而言，学习使用这种架构走一些弯路就再正常不过了。这也正是Axon Framework诞生的初衷：帮助开发者轻松的事项CQRS模式，从而把更多的时间和精力花在实际业务上。</p>
 ]]></content>
     </entry>
     
@@ -75,20 +125,6 @@
 <h3 id="Job-Configuration"><a href="#Job-Configuration" class="headerlink" title="Job Configuration"></a>Job Configuration</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">@Configuration</div><div class="line">public class JobConfiguration &#123;</div><div class="line"> </div><div class="line">    private static Log logger</div><div class="line">      = LogFactory.getLog(JobConfiguration.class);</div><div class="line"> </div><div class="line">    @Autowired</div><div class="line">    public JobBuilderFactory jobBuilderFactory;</div><div class="line"> </div><div class="line">    @Autowired</div><div class="line">    public StepBuilderFactory stepBuilderFactory;</div><div class="line"> </div><div class="line">    @Bean</div><div class="line">    public Job job() &#123;</div><div class="line">        return jobBuilderFactory.get(&quot;job&quot;)</div><div class="line">          .start(stepBuilderFactory.get(&quot;jobStep1&quot;)</div><div class="line">          .tasklet(new Tasklet() &#123;</div><div class="line">             </div><div class="line">              @Override</div><div class="line">              public RepeatStatus execute(StepContribution contribution, </div><div class="line">                ChunkContext chunkContext) throws Exception &#123;</div><div class="line">                 </div><div class="line">                logger.info(&quot;Job was run&quot;);</div><div class="line">                return RepeatStatus.FINISHED;</div><div class="line">              &#125;</div><div class="line">        &#125;).build()).build();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h3 id="Chunk-Oriented-Processing"><a href="#Chunk-Oriented-Processing" class="headerlink" title="Chunk-Oriented Processing"></a>Chunk-Oriented Processing</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Chunk oriented processing refers to reading the data one at a time, and creating &apos;chunks&apos; that will be written out, within a transaction boundary.</div></pre></td></tr></table></figure>
 <h2 id="Spring-Cloud-Dataflow"><a href="#Spring-Cloud-Dataflow" class="headerlink" title="Spring Cloud Dataflow"></a>Spring Cloud Dataflow</h2><h3 id="Tap"><a href="#Tap" class="headerlink" title="Tap"></a>Tap</h3>]]></content>
-    </entry>
-    
-    <entry>
-      <title><![CDATA[Axon Framework 介绍]]></title>
-      <url>https://mittyok.github.io/2016/12/02/Axon_Framework_%E4%BB%8B%E7%BB%8D/</url>
-      <content type="html"><![CDATA[<p>Axon Framework设计最初的想法，就是设计一个框架，能够帮助开发者解决应用的可扩展和可伸缩性，使开发者不用太关心太多的技术细节，而是把这些事情交由框架本身来关心。</p>
-<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><h3 id="历史"><a href="#历史" class="headerlink" title="历史"></a>历史</h3><p>随着时间的前行，我们发现，软件产品的需求，无论是功能性的还是非功能性的都在快速的增长。企业不再仅仅是通过宣传册来大力宣传业务，更希望他们的产品能够与业务与时俱进。这不仅仅意味着项目和代码可能会越来越复杂，更意味着软件的功能设计要不断的增加、改变甚至移除。最令人心烦的是，有时候表面上看起来非常容易实现的一个特性，却需要开发团队对整个应用拆分和理解。而且，当今的网络应用的目标都是能应对几十亿的潜在用户，这就使得可扩展性成为一个不可争辩的一个需求。</p>
-<p>目前已经有很多的应用和框架在尝试解决应用的可扩展性问题，比如：GigaSpaces、Terracotta，但是这些框架有一个明显的问题，他们在尝试解决问题的同时，让开发者依然使用开发者熟悉的分层架构，在某些情况下，甚至限制和阻止开发者使用一个真正的域模型，强迫开发者将所有的业务逻辑放入业务层中。尽管这样做可以很快的搭建起一个应用，但是慢慢的会导致应用越来越复杂，开发越来越慢。</p>
-<p>Greg Young第一次提到了Command Query Responsiblity Segregation (CQRS)模式，通过改变应用的架构来解决这些问题。CQRS并不通过层来划分业务，而是基于读或者写来划分业务。这就意味着执行写的组件和执行读的组件是完全分开的。这样做的一个很重要的原因是应用的读和写对技术的或者是非技术的需求是完全不同的。Command执行后，查询组件会使用特定的事件进行同步或者异步的更新操作。正是这种通过事件更新的机制使得应用在框架上更容易延伸和扩展，最终也会更利于维护。</p>
-<blockquote>
-<p><img src="http://ogj4ygzvp.bkt.clouddn.com/note.png" alt="">Note：这里我们不会花大部分时间来讲CQRS，如果你想更多的了解CQRS，可以访问这里：<a href="http://www.axonframework.org/" target="_blank" rel="external">www.axonframework.org</a>，这里有一些背景介绍的一些链接。</p>
-</blockquote>
-<p>可以看到，CQRS与我们当今主流的开发结构有很大的差距，自然就很难理解。对于开发者而言，学习使用这种架构走一些弯路就再正常不过了。这也正是Axon Framework诞生的初衷：帮助开发者轻松的事项CQRS模式，从而把更多的时间和精力花在实际业务上。</p>
-]]></content>
     </entry>
     
     <entry>
