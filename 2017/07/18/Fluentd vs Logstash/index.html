@@ -8,17 +8,17 @@
   <link rel="dns-prefetch" href="https://mittyok.github.io">
   <title>Fluentd vs Logstash | MittyOK</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="说起Logstash，大家可能略显生疏，但是说起ELK，大家应该再熟悉不过。所谓的ELK及Elasticsearch，Logstash，Kibana。在Panda Strike公司，他们使用了ELK工具，他们有自己的Elasticsearch集群，但是逐渐的，他们去掉了Logstash，而是使用了Fluentd替换了Logstash，称其为EFK，虽然听起来挺拗口的，但是我们还是看一下他们为什么要">
+  <meta name="description" content="说起Logstash，大家可能略显生疏，但是说起ELK，大家应该再熟悉不过。所谓的ELK即Elasticsearch，Logstash，Kibana。在Panda Strike公司，他们使用了ELK工具，他们有自己的Elasticsearch集群，但是逐渐的，他们去掉了Logstash，而是使用了Fluentd替换了Logstash，称其为EFK，虽然听起来挺拗口的，但是我们还是看一下他们为什么要">
 <meta name="keywords" content="Fluted,ELK,Logstash,Log">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Fluentd vs Logstash">
 <meta property="og:url" content="https://mittyok.github.io/2017/07/18/Fluentd vs Logstash/index.html">
 <meta property="og:site_name" content="MittyOK">
-<meta property="og:description" content="说起Logstash，大家可能略显生疏，但是说起ELK，大家应该再熟悉不过。所谓的ELK及Elasticsearch，Logstash，Kibana。在Panda Strike公司，他们使用了ELK工具，他们有自己的Elasticsearch集群，但是逐渐的，他们去掉了Logstash，而是使用了Fluentd替换了Logstash，称其为EFK，虽然听起来挺拗口的，但是我们还是看一下他们为什么要">
-<meta property="og:updated_time" content="2017-07-18T06:08:20.000Z">
+<meta property="og:description" content="说起Logstash，大家可能略显生疏，但是说起ELK，大家应该再熟悉不过。所谓的ELK即Elasticsearch，Logstash，Kibana。在Panda Strike公司，他们使用了ELK工具，他们有自己的Elasticsearch集群，但是逐渐的，他们去掉了Logstash，而是使用了Fluentd替换了Logstash，称其为EFK，虽然听起来挺拗口的，但是我们还是看一下他们为什么要">
+<meta property="og:updated_time" content="2017-07-18T06:18:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Fluentd vs Logstash">
-<meta name="twitter:description" content="说起Logstash，大家可能略显生疏，但是说起ELK，大家应该再熟悉不过。所谓的ELK及Elasticsearch，Logstash，Kibana。在Panda Strike公司，他们使用了ELK工具，他们有自己的Elasticsearch集群，但是逐渐的，他们去掉了Logstash，而是使用了Fluentd替换了Logstash，称其为EFK，虽然听起来挺拗口的，但是我们还是看一下他们为什么要">
+<meta name="twitter:description" content="说起Logstash，大家可能略显生疏，但是说起ELK，大家应该再熟悉不过。所谓的ELK即Elasticsearch，Logstash，Kibana。在Panda Strike公司，他们使用了ELK工具，他们有自己的Elasticsearch集群，但是逐渐的，他们去掉了Logstash，而是使用了Fluentd替换了Logstash，称其为EFK，虽然听起来挺拗口的，但是我们还是看一下他们为什么要">
   
     <link rel="alternative" href="/atom.xml" title="MittyOK" type="application/atom+xml">
   
@@ -174,7 +174,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>说起Logstash，大家可能略显生疏，但是说起ELK，大家应该再熟悉不过。所谓的ELK及Elasticsearch，Logstash，Kibana。在Panda Strike公司，他们使用了ELK工具，他们有自己的Elasticsearch集群，但是逐渐的，他们去掉了Logstash，而是使用了Fluentd替换了Logstash，称其为EFK，虽然听起来挺拗口的，但是我们还是看一下他们为什么要这么做。</p>
+        <p>说起Logstash，大家可能略显生疏，但是说起ELK，大家应该再熟悉不过。所谓的ELK即Elasticsearch，Logstash，Kibana。在Panda Strike公司，他们使用了ELK工具，他们有自己的Elasticsearch集群，但是逐渐的，他们去掉了Logstash，而是使用了Fluentd替换了Logstash，称其为EFK，虽然听起来挺拗口的，但是我们还是看一下他们为什么要这么做。</p>
 <h2 id="Why"><a href="#Why" class="headerlink" title="Why"></a>Why</h2><p>首先呢，Fluentd和Logstash均提供了日志处理（Log shipper）和转发（Log forwarder）的功能。Wikipedia中对log shipping有定义：</p>
 <p>  log shipping “is the process of automating the backup of a database and transaction log files on a primary (production) database server, and then restoring them onto a standby server.”</p>
 <p>对log forwarder也有定义：</p>
@@ -199,11 +199,28 @@
 <li>内存和CPU的一些需求（对我们而言，就这一点Fluentd就轻松的胜出了）</li>
 </ul>
 <p>再来一个删节版的输出看一下：</p>
-<h1 id="LOGSTASH-FORWARDER"><a href="#LOGSTASH-FORWARDER" class="headerlink" title="LOGSTASH FORWARDER"></a>LOGSTASH FORWARDER</h1><p>  $ ps fauxwww –sort -rss |awk ‘/(USER|logstash-forwarder)/ { print }’<br>  %CPU %MEM<br>  0.0  0.7</p>
-<h1 id="LOGSTASH-SHIPPER"><a href="#LOGSTASH-SHIPPER" class="headerlink" title="LOGSTASH SHIPPER"></a>LOGSTASH SHIPPER</h1><p>  ps fauxwww –sort -rss |awk ‘/(USER|logstash)/ { print }’<br>  %CPU %MEM<br>  4.8 20.9</p>
-<h1 id="FLUENTD-FORWARDER"><a href="#FLUENTD-FORWARDER" class="headerlink" title="FLUENTD FORWARDER"></a>FLUENTD FORWARDER</h1><p>  ps fauxwww –sort -rss |awk ‘$1 ~ /(USER|td-agent)/ { print }’<br>  %CPU %MEM<br>  0.0  2.3<br>  0.1  4.5</p>
-<h1 id="FLUENTD-SHIPPER"><a href="#FLUENTD-SHIPPER" class="headerlink" title="FLUENTD SHIPPER"></a>FLUENTD SHIPPER</h1><p>  ps fauxwww –sort -rss |awk ‘$1 ~ /(USER|td-agent)/ { print }’<br>  %CPU %MEM<br>  0.0  2.3<br>  0.2  7.3</p>
-<p>这些数据完全来自我们的生产环境，不是基于某些方面的一些基准测试。从数据上看，Logstash的forwarder明显胜出了Fluentd的Forwarder。但是Fluentd的shipper的表现要远远好于Logstash的shipper，并且在对Logstash令人失望的经验之后，Fluentd使用起来更容易，更可靠。</p>
+<pre><code># LOGSTASH FORWARDER
+$ ps fauxwww --sort -rss |awk &apos;/(USER|logstash-forwarder)/ { print }&apos;
+%CPU %MEM
+0.0  0.7
+
+# LOGSTASH SHIPPER
+ps fauxwww --sort -rss |awk &apos;/(USER|logstash)/ { print }&apos;
+%CPU %MEM
+4.8 20.9
+
+# FLUENTD FORWARDER
+ps fauxwww --sort -rss |awk &apos;$1 ~ /(USER|td-agent)/ { print }&apos;
+%CPU %MEM
+0.0  2.3
+0.1  4.5
+
+# FLUENTD SHIPPER
+ps fauxwww --sort -rss |awk &apos;$1 ~ /(USER|td-agent)/ { print }&apos;
+%CPU %MEM
+0.0  2.3
+0.2  7.3
+</code></pre><p>这些数据完全来自我们的生产环境，不是基于某些方面的一些基准测试。从数据上看，Logstash的forwarder明显胜出了Fluentd的Forwarder。但是Fluentd的shipper的表现要远远好于Logstash的shipper，并且在对Logstash令人失望的经验之后，Fluentd使用起来更容易，更可靠。</p>
 
       
 
