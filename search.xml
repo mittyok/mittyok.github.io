@@ -4,6 +4,22 @@
   
     
     <entry>
+      <title><![CDATA[Selenium Grid]]></title>
+      <url>https://mittyok.github.io/2017/07/18/Selenium%20Grid/</url>
+      <content type="html"><![CDATA[<h2 id="Selenium-Grid是什么"><a href="#Selenium-Grid是什么" class="headerlink" title="Selenium-Grid是什么"></a>Selenium-Grid是什么</h2><p>Selenium-Grid可以让我们在不同机器的不同浏览器上并行的运行测试。也就是说，我们可以同时在不同的机器、不同的操作系统，不同的浏览器上同时运行测试。本质上，Selenium-Grid支持分布式的测试执行。它允许我们在一个分布式的执行环境中运行测试。</p>
+<h2 id="什么时候用Selenium-Grid"><a href="#什么时候用Selenium-Grid" class="headerlink" title="什么时候用Selenium-Grid"></a>什么时候用Selenium-Grid</h2><p>一般来说，有两个原因我们会用Selenium-Grid：</p>
+<ol>
+<li>我们需要在不同的操作系统，多种类型或者版本的浏览器中运行我们的测试</li>
+<li>为了减少我们执行套件所花费的时间</li>
+</ol>
+<h2 id="启动Selenium-Grid"><a href="#启动Selenium-Grid" class="headerlink" title="启动Selenium-Grid"></a>启动Selenium-Grid</h2><p>一般来说，我们需要先启动一个hub，应为所有的nodes是依赖hub的。</p>
+<h3 id="Start-a-Hub"><a href="#Start-a-Hub" class="headerlink" title="Start a Hub"></a>Start a Hub</h3><pre><code>java -jar selenium-server-standalone-2.44.0.jar -role hub
+</code></pre><h3 id="Start-a-Node"><a href="#Start-a-Node" class="headerlink" title="Start a Node"></a>Start a Node</h3><pre><code>java -jar selenium-server-standalone-2.44.0.jar -role node  -hub http://localhost:4444/grid/register
+</code></pre><h3 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h3><p>可以看下这个<a href="http://elementalselenium.com/tips/52-grid" target="_blank" rel="external">demo</a>，比较清晰。</p>
+]]></content>
+    </entry>
+    
+    <entry>
       <title><![CDATA[Fluentd vs Logstash]]></title>
       <url>https://mittyok.github.io/2017/07/18/Fluentd%20vs%20Logstash/</url>
       <content type="html"><![CDATA[<p>说起Logstash，大家可能略显生疏，但是说起ELK，大家应该再熟悉不过。所谓的ELK即Elasticsearch，Logstash，Kibana。在Panda Strike公司，他们使用了ELK工具，他们有自己的Elasticsearch集群，但是逐渐的，他们去掉了Logstash，而是使用了Fluentd替换了Logstash，称其为EFK，虽然听起来挺拗口的，但是我们还是看一下他们为什么要这么做。</p>

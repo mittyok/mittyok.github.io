@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://mittyok.github.io/2017/07/18/Selenium%20Grid/</loc>
+    
+    <lastmod>2017-07-18T07:08:46.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://mittyok.github.io/2017/07/18/Fluentd%20vs%20Logstash/</loc>
     
     <lastmod>2017-07-18T06:18:05.000Z</lastmod>
