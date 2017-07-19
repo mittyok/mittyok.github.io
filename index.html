@@ -175,13 +175,23 @@
 <h2 id="什么时候用Selenium-Grid"><a href="#什么时候用Selenium-Grid" class="headerlink" title="什么时候用Selenium-Grid"></a>什么时候用Selenium-Grid</h2><p>一般来说，有两个原因我们会用Selenium-Grid：</p>
 <ol>
 <li>我们需要在不同的操作系统，多种类型或者版本的浏览器中运行我们的测试</li>
-<li>为了减少我们执行套件所花费的时间</li>
+<li>为了减少我们执行测试套件所花费的时间</li>
 </ol>
 <h2 id="启动Selenium-Grid"><a href="#启动Selenium-Grid" class="headerlink" title="启动Selenium-Grid"></a>启动Selenium-Grid</h2><p>一般来说，我们需要先启动一个hub，应为所有的nodes是依赖hub的。</p>
 <h3 id="Start-a-Hub"><a href="#Start-a-Hub" class="headerlink" title="Start a Hub"></a>Start a Hub</h3><pre><code>java -jar selenium-server-standalone-2.44.0.jar -role hub
 </code></pre><h3 id="Start-a-Node"><a href="#Start-a-Node" class="headerlink" title="Start a Node"></a>Start a Node</h3><pre><code>java -jar selenium-server-standalone-2.44.0.jar -role node  -hub http://localhost:4444/grid/register
-</code></pre><h3 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h3><p>可以看下这个<a href="http://elementalselenium.com/tips/52-grid" target="_blank" rel="external">demo</a>，比较清晰。</p>
+</code></pre><h2 id="Demo-with-Ruby"><a href="#Demo-with-Ruby" class="headerlink" title="Demo(with Ruby)"></a>Demo(with Ruby)</h2><p>可以看下这个<a href="http://elementalselenium.com/tips/52-grid" target="_blank" rel="external">demo</a>，比较清晰。</p>
+<h2 id="Trouble-shooting"><a href="#Trouble-shooting" class="headerlink" title="Trouble shooting"></a>Trouble shooting</h2><h3 id="404-page-not-found-error"><a href="#404-page-not-found-error" class="headerlink" title="404 page not found error"></a>404 page not found error</h3><p>一种比较隐蔽的情形：</p>
+<blockquote>
+<p>比如：我们通过域名访问hub，<a href="http://seleniumhub.com，selenium" target="_blank" rel="external">http://seleniumhub.com，selenium</a> remote connect在初始化时，会对域名进行解析，用解析后的IP进行后续的连接测试操作。<br><br>好啦，问题来了：<br>假设我们的hub使用了反向代理：seleniumhub.com –&gt; x.x.x.x:4444<br><br>我们的域名服务器将seleniumhub.com解析为：y.y.y.y（反向代理服务器在这台机子上）<br>selenium会使用解析后的ip y.y.y.y去连接hub进行测试，明显不可以y.y.y.y</p>
+</blockquote>
+<p>解决办法：</p>
+<pre><code>from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.remote.remote_connection import RemoteConnection
 
+executor = RemoteConnection(&quot;http://seleniumhub.com/wd/hub&quot;, resolve_ip=False)
+chrome = webdriver.Remote(executor, desired_capabilities=DesiredCapabilities.CHROME)
+</code></pre>
       
 
       
