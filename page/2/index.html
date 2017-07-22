@@ -151,6 +151,85 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Schema-Generator-By-JPA" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/11/16/Schema-Generator-By-JPA/">Schema-Generator-By-JPA</a>
+    </h1>
+  
+
+        
+        <a href="/2016/11/16/Schema-Generator-By-JPA/" class="archive-article-date">
+  	<time datetime="2016-11-16T02:29:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-16</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line">&lt;!-- /////// START JPA Schema Generator --&gt;</div><div class="line">&lt;plugin&gt;</div><div class="line">    &lt;groupId&gt;io.github.divinespear&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;jpa-schema-maven-plugin&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;0.2.0&lt;/version&gt;</div><div class="line">    &lt;executions&gt;</div><div class="line">    &lt;/executions&gt;</div><div class="line">    &lt;configuration&gt;</div><div class="line">    &lt;jdbcUrl&gt;这里配置jdbcurl&lt;/jdbcUrl&gt;</div><div class="line">    &lt;jdbcUser&gt;数据库用户名&lt;/jdbcUser&gt;</div><div class="line">    &lt;jdbcPassword&gt;数据库密码&lt;/jdbcPassword&gt;</div><div class="line">    &lt;!-- 这里需要指定JPA的实现提供者 --&gt;</div><div class="line">    &lt;vendor&gt;hibernate&lt;/vendor&gt;</div><div class="line">    &lt;!--&lt;databaseAction&gt;create&lt;/databaseAction&gt;--&gt;</div><div class="line">    &lt;scriptAction&gt;drop-and-create&lt;/scriptAction&gt;</div><div class="line">    &lt;!--&lt;scriptAction&gt;$&#123;AAA&#125;&lt;/scriptAction&gt;--&gt;</div><div class="line">    &lt;packageToScan&gt;指定要扫描实体的包路径&lt;/packageToScan&gt;</div><div class="line">    &lt;properties&gt;</div><div class="line">        &lt;hibernate.dialect&gt;org.hibernate.dialect.MySQL5Dialect&lt;/hibernate.dialect&gt;</div><div class="line">    &lt;/properties&gt;</div><div class="line">&lt;/configuration&gt;</div><div class="line">    &lt;dependencies&gt;</div><div class="line">        &lt;!-- https://mvnrepository.com/artifact/org.eclipse.persistence/eclipselink --&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.eclipse.persistence&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;eclipselink&lt;/artifactId&gt;</div><div class="line">            &lt;version&gt;2.6.4&lt;/version&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.hibernate&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;hibernate-core&lt;/artifactId&gt;</div><div class="line">            &lt;version&gt;5.0.9.Final&lt;/version&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.hibernate&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;hibernate-entitymanager&lt;/artifactId&gt;</div><div class="line">            &lt;version&gt;5.0.9.Final&lt;/version&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.hibernate.javax.persistence&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;hibernate-jpa-2.1-api&lt;/artifactId&gt;</div><div class="line">            &lt;version&gt;1.0.0.Final&lt;/version&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;mysql&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;</div><div class="line">            &lt;version&gt;5.1.39&lt;/version&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">    &lt;/dependencies&gt;</div><div class="line">&lt;/plugin&gt;</div><div class="line">&lt;!-- JPA Schema Generator END ///////// --&gt;</div></pre></td></tr></table></figure>
+<p>相关配置可以参照：<a href="http://divinespear.github.io/jpa-schema-maven-plugin/generate-mojo.html" target="_blank" rel="external">jpa-schema-plugin</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">database</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ddl</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">hebernate</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">eclipselink</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">jpa</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/11/16/Schema-Generator-By-JPA/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-Hazelcast-Jcache-Implementation" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -972,30 +1051,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">database</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ddl</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">hebernate</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">eclipselink</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">jpa</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">spring cloud stream</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
               </li>
              
@@ -1021,6 +1076,30 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">config client</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">spring cloud stream</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">database</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ddl</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">hebernate</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">eclipselink</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">jpa</a>
               </li>
              
               <li class="article-tag-list-item">

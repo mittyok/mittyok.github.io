@@ -4,6 +4,12 @@
   
     
     <entry>
+      <title><![CDATA[emacs org mode cheatsheet]]></title>
+      <url>https://mittyok.github.io/2017/07/22/emacs-org-mode-cheatsheet/</url>
+      <content type="html"></content>
+    </entry>
+    
+    <entry>
       <title><![CDATA[docker/aaa]]></title>
       <url>https://mittyok.github.io/2017/07/19/docker/docker-aaa/</url>
       <content type="html"><![CDATA[<p>Hello</p>
@@ -90,6 +96,12 @@ ps fauxwww --sort -rss |awk &apos;$1 ~ /(USER|td-agent)/ { print }&apos;
     </entry>
     
     <entry>
+      <title><![CDATA[Spring cloud stream binder rabbitmq]]></title>
+      <url>https://mittyok.github.io/2016/12/28/Spring%20cloud%20stream%20binder%20rabbitmq/</url>
+      <content type="html"><![CDATA[<h2 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;spring-cloud-stream-binder-rabbit&lt;/artifactId&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;spring-cloud-stream&lt;/artifactId&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>]]></content>
+    </entry>
+    
+    <entry>
       <title><![CDATA[RabbitMQ性能及扩展性的提升-路由拓扑结构]]></title>
       <url>https://mittyok.github.io/2016/12/28/RabbitMQ%E6%80%A7%E8%83%BD%E5%8F%8A%E6%89%A9%E5%B1%95%E6%80%A7%E7%9A%84%E6%8F%90%E5%8D%87-%E8%B7%AF%E7%94%B1%E6%8B%93%E6%89%91%E7%BB%93%E6%9E%84/</url>
       <content type="html"><![CDATA[<blockquote>
@@ -97,12 +109,6 @@ ps fauxwww --sort -rss |awk &apos;$1 ~ /(USER|td-agent)/ { print }&apos;
 </blockquote>
 <p>为了实现系统的高伸缩性，我们需要设计一个合适的路由拓扑。我们需要考虑很多的细节，比如：消息实现环境中存在的问题及限制，性能策略等。</p>
 ]]></content>
-    </entry>
-    
-    <entry>
-      <title><![CDATA[Spring cloud stream binder rabbitmq]]></title>
-      <url>https://mittyok.github.io/2016/12/28/Spring%20cloud%20stream%20binder%20rabbitmq/</url>
-      <content type="html"><![CDATA[<h2 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;spring-cloud-stream-binder-rabbit&lt;/artifactId&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;spring-cloud-stream&lt;/artifactId&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>]]></content>
     </entry>
     
     <entry>
@@ -122,20 +128,6 @@ ps fauxwww --sort -rss |awk &apos;$1 ~ /(USER|td-agent)/ { print }&apos;
 <blockquote>
 <p>大家可以看下这里学习一下：<br><a href="https://wiki.archlinux.org/index.php/LVM_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87" target="_blank" rel="external">LVM相关介绍</a>)</p>
 </blockquote>
-]]></content>
-    </entry>
-    
-    <entry>
-      <title><![CDATA[Axon Framework 介绍]]></title>
-      <url>https://mittyok.github.io/2016/12/02/Axon_Framework_%E4%BB%8B%E7%BB%8D/</url>
-      <content type="html"><![CDATA[<p>Axon Framework设计最初的想法，就是设计一个框架，能够帮助开发者解决应用的可扩展和可伸缩性，使开发者不用太关心太多的技术细节，而是把这些事情交由框架本身来关心。</p>
-<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><h3 id="历史"><a href="#历史" class="headerlink" title="历史"></a>历史</h3><p>随着时间的前行，我们发现，软件产品的需求，无论是功能性的还是非功能性的都在快速的增长。企业不再仅仅是通过宣传册来大力宣传业务，更希望他们的产品能够与业务与时俱进。这不仅仅意味着项目和代码可能会越来越复杂，更意味着软件的功能设计要不断的增加、改变甚至移除。最令人心烦的是，有时候表面上看起来非常容易实现的一个特性，却需要开发团队对整个应用拆分和理解。而且，当今的网络应用的目标都是能应对几十亿的潜在用户，这就使得可扩展性成为一个不可争辩的一个需求。</p>
-<p>目前已经有很多的应用和框架在尝试解决应用的可扩展性问题，比如：GigaSpaces、Terracotta，但是这些框架有一个明显的问题，他们在尝试解决问题的同时，让开发者依然使用开发者熟悉的分层架构，在某些情况下，甚至限制和阻止开发者使用一个真正的域模型，强迫开发者将所有的业务逻辑放入业务层中。尽管这样做可以很快的搭建起一个应用，但是慢慢的会导致应用越来越复杂，开发越来越慢。</p>
-<p>Greg Young第一次提到了Command Query Responsiblity Segregation (CQRS)模式，通过改变应用的架构来解决这些问题。CQRS并不通过层来划分业务，而是基于读或者写来划分业务。这就意味着执行写的组件和执行读的组件是完全分开的。这样做的一个很重要的原因是应用的读和写对技术的或者是非技术的需求是完全不同的。Command执行后，查询组件会使用特定的事件进行同步或者异步的更新操作。正是这种通过事件更新的机制使得应用在框架上更容易延伸和扩展，最终也会更利于维护。</p>
-<blockquote>
-<p><img src="http://ogj4ygzvp.bkt.clouddn.com/note.png" alt="">Note：这里我们不会花大部分时间来讲CQRS，如果你想更多的了解CQRS，可以访问这里：<a href="http://www.axonframework.org/" target="_blank" rel="external">www.axonframework.org</a>，这里有一些背景介绍的一些链接。</p>
-</blockquote>
-<p>可以看到，CQRS与我们当今主流的开发结构有很大的差距，自然就很难理解。对于开发者而言，学习使用这种架构走一些弯路就再正常不过了。这也正是Axon Framework诞生的初衷：帮助开发者轻松的事项CQRS模式，从而把更多的时间和精力花在实际业务上。</p>
 ]]></content>
     </entry>
     
@@ -175,6 +167,20 @@ ps fauxwww --sort -rss |awk &apos;$1 ~ /(USER|td-agent)/ { print }&apos;
 <h3 id="Job-Configuration"><a href="#Job-Configuration" class="headerlink" title="Job Configuration"></a>Job Configuration</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">@Configuration</div><div class="line">public class JobConfiguration &#123;</div><div class="line"> </div><div class="line">    private static Log logger</div><div class="line">      = LogFactory.getLog(JobConfiguration.class);</div><div class="line"> </div><div class="line">    @Autowired</div><div class="line">    public JobBuilderFactory jobBuilderFactory;</div><div class="line"> </div><div class="line">    @Autowired</div><div class="line">    public StepBuilderFactory stepBuilderFactory;</div><div class="line"> </div><div class="line">    @Bean</div><div class="line">    public Job job() &#123;</div><div class="line">        return jobBuilderFactory.get(&quot;job&quot;)</div><div class="line">          .start(stepBuilderFactory.get(&quot;jobStep1&quot;)</div><div class="line">          .tasklet(new Tasklet() &#123;</div><div class="line">             </div><div class="line">              @Override</div><div class="line">              public RepeatStatus execute(StepContribution contribution, </div><div class="line">                ChunkContext chunkContext) throws Exception &#123;</div><div class="line">                 </div><div class="line">                logger.info(&quot;Job was run&quot;);</div><div class="line">                return RepeatStatus.FINISHED;</div><div class="line">              &#125;</div><div class="line">        &#125;).build()).build();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h3 id="Chunk-Oriented-Processing"><a href="#Chunk-Oriented-Processing" class="headerlink" title="Chunk-Oriented Processing"></a>Chunk-Oriented Processing</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Chunk oriented processing refers to reading the data one at a time, and creating &apos;chunks&apos; that will be written out, within a transaction boundary.</div></pre></td></tr></table></figure>
 <h2 id="Spring-Cloud-Dataflow"><a href="#Spring-Cloud-Dataflow" class="headerlink" title="Spring Cloud Dataflow"></a>Spring Cloud Dataflow</h2><h3 id="Tap"><a href="#Tap" class="headerlink" title="Tap"></a>Tap</h3>]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Axon Framework 介绍]]></title>
+      <url>https://mittyok.github.io/2016/12/02/Axon_Framework_%E4%BB%8B%E7%BB%8D/</url>
+      <content type="html"><![CDATA[<p>Axon Framework设计最初的想法，就是设计一个框架，能够帮助开发者解决应用的可扩展和可伸缩性，使开发者不用太关心太多的技术细节，而是把这些事情交由框架本身来关心。</p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><h3 id="历史"><a href="#历史" class="headerlink" title="历史"></a>历史</h3><p>随着时间的前行，我们发现，软件产品的需求，无论是功能性的还是非功能性的都在快速的增长。企业不再仅仅是通过宣传册来大力宣传业务，更希望他们的产品能够与业务与时俱进。这不仅仅意味着项目和代码可能会越来越复杂，更意味着软件的功能设计要不断的增加、改变甚至移除。最令人心烦的是，有时候表面上看起来非常容易实现的一个特性，却需要开发团队对整个应用拆分和理解。而且，当今的网络应用的目标都是能应对几十亿的潜在用户，这就使得可扩展性成为一个不可争辩的一个需求。</p>
+<p>目前已经有很多的应用和框架在尝试解决应用的可扩展性问题，比如：GigaSpaces、Terracotta，但是这些框架有一个明显的问题，他们在尝试解决问题的同时，让开发者依然使用开发者熟悉的分层架构，在某些情况下，甚至限制和阻止开发者使用一个真正的域模型，强迫开发者将所有的业务逻辑放入业务层中。尽管这样做可以很快的搭建起一个应用，但是慢慢的会导致应用越来越复杂，开发越来越慢。</p>
+<p>Greg Young第一次提到了Command Query Responsiblity Segregation (CQRS)模式，通过改变应用的架构来解决这些问题。CQRS并不通过层来划分业务，而是基于读或者写来划分业务。这就意味着执行写的组件和执行读的组件是完全分开的。这样做的一个很重要的原因是应用的读和写对技术的或者是非技术的需求是完全不同的。Command执行后，查询组件会使用特定的事件进行同步或者异步的更新操作。正是这种通过事件更新的机制使得应用在框架上更容易延伸和扩展，最终也会更利于维护。</p>
+<blockquote>
+<p><img src="http://ogj4ygzvp.bkt.clouddn.com/note.png" alt="">Note：这里我们不会花大部分时间来讲CQRS，如果你想更多的了解CQRS，可以访问这里：<a href="http://www.axonframework.org/" target="_blank" rel="external">www.axonframework.org</a>，这里有一些背景介绍的一些链接。</p>
+</blockquote>
+<p>可以看到，CQRS与我们当今主流的开发结构有很大的差距，自然就很难理解。对于开发者而言，学习使用这种架构走一些弯路就再正常不过了。这也正是Axon Framework诞生的初衷：帮助开发者轻松的事项CQRS模式，从而把更多的时间和精力花在实际业务上。</p>
+]]></content>
     </entry>
     
     <entry>
