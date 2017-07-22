@@ -6,7 +6,11 @@
     <entry>
       <title><![CDATA[emacs org mode cheatsheet]]></title>
       <url>https://mittyok.github.io/2017/07/22/emacs-org-mode-cheatsheet/</url>
-      <content type="html"></content>
+      <content type="html"><![CDATA[<ul>
+<li>缩略图：TAB<br><img src="http://ogj4ygzvp.bkt.clouddn.com/2017-07-22-17-40-13.png" alt="2017-07-22-17-40-13"></li>
+<li>dfs</li>
+</ul>
+]]></content>
     </entry>
     
     <entry>
