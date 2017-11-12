@@ -15,6 +15,7 @@
 <meta property="og:url" content="https://mittyok.github.io/2016/12/02/spring-cloud-dataflow-入门/index.html">
 <meta property="og:site_name" content="MittyOK">
 <meta property="og:description" content="最初为什么选择Spring make j2ee easier loose-coupling through interfaces, dependency injection, aspect-oriented programming sought to make the entire java ecosystem easier security, various types of database,">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-12-15T07:13:45.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="spring cloud dataflow 入门">
@@ -181,9 +182,9 @@
 <li>security, various types of database, data integration, and now cloud-native microservices</li>
 <li>spring is headed now with regard to reactive programming.</li>
 </ul>
-<h2 id="H2"><a href="#H2" class="headerlink" title="H2"></a>H2</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">The development of H2 was started in May 2004, but it was first published on December 14th 2005. The main author of H2, Thomas Mueller, is also the original developer of Hypersonic SQL. In 2001, he joined PointBase Inc. where he wrote PointBase Micro, a commercial Java SQL database. At that point, he had to discontinue Hypersonic SQL. The HSQLDB Group was formed to continued to work on the Hypersonic SQL codebase. The name H2 stands for Hypersonic 2, however H2 does not share code with Hypersonic SQL or HSQLDB. H2 is built from scratch.</div></pre></td></tr></table></figure>
-<h2 id="Spring-Cloud-Task"><a href="#Spring-Cloud-Task" class="headerlink" title="Spring Cloud Task"></a>Spring Cloud Task</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Spring Cloud Task allows a user to develop and run short lived microservices using Spring Cloud and run them locally, in the cloud, even on Spring Cloud Data Flow. Just add @EnableTask and run your app as a Spring Boot app (single application context).</div></pre></td></tr></table></figure>
-<h2 id="Task-Demo"><a href="#Task-Demo" class="headerlink" title="Task Demo"></a>Task Demo</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">@SpringBootApplication</div><div class="line">@EnableTask</div><div class="line">public class SampleTask &#123;</div><div class="line"></div><div class="line">    @Bean</div><div class="line">    CommandLineRunner commandLineRunner() &#123;</div><div class="line">        return new HelloWorldCommandLineRunner();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        SpringApplication.run(SampleTask.class, args);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private class HelloWorldCommandLineRunner implements CommandLineRunner &#123;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void run(String... strings) throws Exception &#123;</div><div class="line">            System.out.println(&quot;Hello World!&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="H2"><a href="#H2" class="headerlink" title="H2"></a>H2</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The development of H2 was started in May 2004, but it was first published on December 14th 2005. The main author of H2, Thomas Mueller, is also the original developer of Hypersonic SQL. In 2001, he joined PointBase Inc. where he wrote PointBase Micro, a commercial Java SQL database. At that point, he had to discontinue Hypersonic SQL. The HSQLDB Group was formed to continued to work on the Hypersonic SQL codebase. The name H2 stands for Hypersonic 2, however H2 does not share code with Hypersonic SQL or HSQLDB. H2 is built from scratch.</span><br></pre></td></tr></table></figure>
+<h2 id="Spring-Cloud-Task"><a href="#Spring-Cloud-Task" class="headerlink" title="Spring Cloud Task"></a>Spring Cloud Task</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Spring Cloud Task allows a user to develop and run short lived microservices using Spring Cloud and run them locally, in the cloud, even on Spring Cloud Data Flow. Just add @EnableTask and run your app as a Spring Boot app (single application context).</span><br></pre></td></tr></table></figure>
+<h2 id="Task-Demo"><a href="#Task-Demo" class="headerlink" title="Task Demo"></a>Task Demo</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@SpringBootApplication</span><br><span class="line">@EnableTask</span><br><span class="line">public class SampleTask &#123;</span><br><span class="line"></span><br><span class="line">    @Bean</span><br><span class="line">    CommandLineRunner commandLineRunner() &#123;</span><br><span class="line">        return new HelloWorldCommandLineRunner();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        SpringApplication.run(SampleTask.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private class HelloWorldCommandLineRunner implements CommandLineRunner &#123;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void run(String... strings) throws Exception &#123;</span><br><span class="line">            System.out.println(&quot;Hello World!&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="Spring-Batch"><a href="#Spring-Batch" class="headerlink" title="Spring Batch"></a>Spring Batch</h2><p>在一些特定的情况下，我们会有这样的需求，我们需要批量的执行一些业务操作。这些业务操作一般都有这样的特点：</p>
 <ol>
 <li>涉及到的数据量较大</li>
@@ -203,9 +204,9 @@
 <h2 id="Concept"><a href="#Concept" class="headerlink" title="Concept"></a>Concept</h2><p>1 Job = Many Steps<br>1 Step = 1 REAT-PROCESS-WRITE or 1 Tasklet</p>
 <p>Job = {Step 1 -&gt; Step 2 -&gt; Step 3}</p>
 <h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><p>Example code.</p>
-<h3 id="Main-Class"><a href="#Main-Class" class="headerlink" title="Main Class"></a>Main Class</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@EnableTask</div><div class="line">@EnableBatchProcessing</div><div class="line">@SpringBootApplication</div><div class="line">public class BatchJobApplication &#123;</div><div class="line"> </div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        SpringApplication.run(BatchJobApplication.class, args);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="Job-Configuration"><a href="#Job-Configuration" class="headerlink" title="Job Configuration"></a>Job Configuration</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">@Configuration</div><div class="line">public class JobConfiguration &#123;</div><div class="line"> </div><div class="line">    private static Log logger</div><div class="line">      = LogFactory.getLog(JobConfiguration.class);</div><div class="line"> </div><div class="line">    @Autowired</div><div class="line">    public JobBuilderFactory jobBuilderFactory;</div><div class="line"> </div><div class="line">    @Autowired</div><div class="line">    public StepBuilderFactory stepBuilderFactory;</div><div class="line"> </div><div class="line">    @Bean</div><div class="line">    public Job job() &#123;</div><div class="line">        return jobBuilderFactory.get(&quot;job&quot;)</div><div class="line">          .start(stepBuilderFactory.get(&quot;jobStep1&quot;)</div><div class="line">          .tasklet(new Tasklet() &#123;</div><div class="line">             </div><div class="line">              @Override</div><div class="line">              public RepeatStatus execute(StepContribution contribution, </div><div class="line">                ChunkContext chunkContext) throws Exception &#123;</div><div class="line">                 </div><div class="line">                logger.info(&quot;Job was run&quot;);</div><div class="line">                return RepeatStatus.FINISHED;</div><div class="line">              &#125;</div><div class="line">        &#125;).build()).build();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="Chunk-Oriented-Processing"><a href="#Chunk-Oriented-Processing" class="headerlink" title="Chunk-Oriented Processing"></a>Chunk-Oriented Processing</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Chunk oriented processing refers to reading the data one at a time, and creating &apos;chunks&apos; that will be written out, within a transaction boundary.</div></pre></td></tr></table></figure>
+<h3 id="Main-Class"><a href="#Main-Class" class="headerlink" title="Main Class"></a>Main Class</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@EnableTask</span><br><span class="line">@EnableBatchProcessing</span><br><span class="line">@SpringBootApplication</span><br><span class="line">public class BatchJobApplication &#123;</span><br><span class="line"> </span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        SpringApplication.run(BatchJobApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Job-Configuration"><a href="#Job-Configuration" class="headerlink" title="Job Configuration"></a>Job Configuration</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">@Configuration</span><br><span class="line">public class JobConfiguration &#123;</span><br><span class="line"> </span><br><span class="line">    private static Log logger</span><br><span class="line">      = LogFactory.getLog(JobConfiguration.class);</span><br><span class="line"> </span><br><span class="line">    @Autowired</span><br><span class="line">    public JobBuilderFactory jobBuilderFactory;</span><br><span class="line"> </span><br><span class="line">    @Autowired</span><br><span class="line">    public StepBuilderFactory stepBuilderFactory;</span><br><span class="line"> </span><br><span class="line">    @Bean</span><br><span class="line">    public Job job() &#123;</span><br><span class="line">        return jobBuilderFactory.get(&quot;job&quot;)</span><br><span class="line">          .start(stepBuilderFactory.get(&quot;jobStep1&quot;)</span><br><span class="line">          .tasklet(new Tasklet() &#123;</span><br><span class="line">             </span><br><span class="line">              @Override</span><br><span class="line">              public RepeatStatus execute(StepContribution contribution, </span><br><span class="line">                ChunkContext chunkContext) throws Exception &#123;</span><br><span class="line">                 </span><br><span class="line">                logger.info(&quot;Job was run&quot;);</span><br><span class="line">                return RepeatStatus.FINISHED;</span><br><span class="line">              &#125;</span><br><span class="line">        &#125;).build()).build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Chunk-Oriented-Processing"><a href="#Chunk-Oriented-Processing" class="headerlink" title="Chunk-Oriented Processing"></a>Chunk-Oriented Processing</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Chunk oriented processing refers to reading the data one at a time, and creating &apos;chunks&apos; that will be written out, within a transaction boundary.</span><br></pre></td></tr></table></figure>
 <h2 id="Spring-Cloud-Dataflow"><a href="#Spring-Cloud-Dataflow" class="headerlink" title="Spring Cloud Dataflow"></a>Spring Cloud Dataflow</h2><h3 id="Tap"><a href="#Tap" class="headerlink" title="Tap"></a>Tap</h3>
       
 
@@ -441,39 +442,27 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Ansible</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">environment</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">production</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">test</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">axon framework</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">event sourcing</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Fluted</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ELK</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Logstash</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Log</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">hazelcast</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">spring cloud</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">jcache</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -493,6 +482,18 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">hazelcast</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">spring cloud</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">jcache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">rabbitmq</a>
               </li>
              
@@ -506,6 +507,38 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">scalability</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Fluted</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ELK</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Logstash</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Log</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">REST API</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">API DESIGN</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">RULE</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">BEST PRACTICE</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -545,18 +578,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">config server</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">config client</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">spring cloud stream</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">database</a>
               </li>
              
@@ -577,15 +598,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">maven</a>
+                <a href="javascript:void(0)" class="js-tag color5">spring cloud stream</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">hibernate</a>
+                <a href="javascript:void(0)" class="js-tag color4">config server</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">schema</a>
+                <a href="javascript:void(0)" class="js-tag color4">config client</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -602,6 +623,30 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">job</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">maven</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">hibernate</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">schema</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">centos</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">logical volume</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">part resize</a>
               </li>
              
               <li class="article-tag-list-item">

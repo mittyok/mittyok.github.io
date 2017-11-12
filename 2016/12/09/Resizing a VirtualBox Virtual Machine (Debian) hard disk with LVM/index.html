@@ -15,6 +15,7 @@
 <meta property="og:url" content="https://mittyok.github.io/2016/12/09/Resizing a VirtualBox Virtual Machine (Debian) hard disk with LVM/index.html">
 <meta property="og:site_name" content="MittyOK">
 <meta property="og:description" content="磁盘相关的一些命令 fdisk -l df  Hard disk format: vmdk to vdi1VBoxManage clonehd disk.vmdk disk.vdi --format vdi Hard disk resize1vboxmanage modifyhd --resize 20000 ./New_VM.vdi Resize the partitionDownload Gp">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-12-09T09:39:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Resizing a VirtualBox Virtual Machine (Debian) hard disk with LVM">
@@ -178,8 +179,8 @@
 <p>fdisk -l</p>
 <p>df</p>
 </blockquote>
-<h2 id="Hard-disk-format-vmdk-to-vdi"><a href="#Hard-disk-format-vmdk-to-vdi" class="headerlink" title="Hard disk format: vmdk to vdi"></a>Hard disk format: vmdk to vdi</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">VBoxManage clonehd disk.vmdk disk.vdi --format vdi</div></pre></td></tr></table></figure>
-<h2 id="Hard-disk-resize"><a href="#Hard-disk-resize" class="headerlink" title="Hard disk resize"></a>Hard disk resize</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vboxmanage modifyhd --resize 20000 ./New_VM.vdi</div></pre></td></tr></table></figure>
+<h2 id="Hard-disk-format-vmdk-to-vdi"><a href="#Hard-disk-format-vmdk-to-vdi" class="headerlink" title="Hard disk format: vmdk to vdi"></a>Hard disk format: vmdk to vdi</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">VBoxManage clonehd disk.vmdk disk.vdi --format vdi</span><br></pre></td></tr></table></figure>
+<h2 id="Hard-disk-resize"><a href="#Hard-disk-resize" class="headerlink" title="Hard disk resize"></a>Hard disk resize</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vboxmanage modifyhd --resize 20000 ./New_VM.vdi</span><br></pre></td></tr></table></figure>
 <h2 id="Resize-the-partition"><a href="#Resize-the-partition" class="headerlink" title="Resize the partition"></a>Resize the partition</h2><h3 id="Download-Gparted-iso"><a href="#Download-Gparted-iso" class="headerlink" title="Download Gparted.iso"></a>Download Gparted.iso</h3><p><a href="http://gparted.org/download.php" target="_blank" rel="external">Download GParted</a></p>
 <blockquote>
 <p>启动时加载GParted.iso，就可以进行分区管理啦。。。</p>
@@ -304,11 +305,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2016/12/28/RabbitMQ性能及扩展性的提升-路由拓扑结构/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2016/12/28/Spring cloud stream binder rabbitmq/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          RabbitMQ性能及扩展性的提升-路由拓扑结构
+          Spring cloud stream binder rabbitmq
         
       </div>
     </a>
@@ -419,39 +420,27 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Ansible</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">environment</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">production</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">test</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">axon framework</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">event sourcing</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Fluted</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ELK</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Logstash</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Log</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">hazelcast</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">spring cloud</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">jcache</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -471,6 +460,18 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">hazelcast</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">spring cloud</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">jcache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">rabbitmq</a>
               </li>
              
@@ -484,6 +485,38 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">scalability</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Fluted</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ELK</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Logstash</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Log</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">REST API</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">API DESIGN</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">RULE</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">BEST PRACTICE</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -523,18 +556,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">config server</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">config client</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">spring cloud stream</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">database</a>
               </li>
              
@@ -555,15 +576,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">maven</a>
+                <a href="javascript:void(0)" class="js-tag color5">spring cloud stream</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">hibernate</a>
+                <a href="javascript:void(0)" class="js-tag color4">config server</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">schema</a>
+                <a href="javascript:void(0)" class="js-tag color4">config client</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -580,6 +601,30 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">job</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">maven</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">hibernate</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">schema</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">centos</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">logical volume</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">part resize</a>
               </li>
              
               <li class="article-tag-list-item">

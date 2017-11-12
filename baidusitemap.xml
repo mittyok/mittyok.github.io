@@ -4,13 +4,80 @@
 
     
   <url>
+    <loc>https://mittyok.github.io/2017/11/12/REST-API-DESIGN-RULEBOOK/</loc>
+    <lastmod>2017-11-12T13:57:10.000Z</lastmod>
+    <data>
+        <display>
+        <title>REST-API-DESIGN-RULEBOOK</title>
+        <pubTime>2017-11-12T08:20:29.000Z</pubTime>
+        
+        <tag>REST API</tag>
+         
+        <tag>API DESIGN</tag>
+         
+        <tag>RULE</tag>
+         
+        <tag>BEST PRACTICE</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://mittyok.github.io/2017/08/02/Ansible-%E5%A4%9A%E7%8E%AF%E5%A2%83%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE/</loc>
+    <lastmod>2017-10-18T09:38:58.000Z</lastmod>
+    <data>
+        <display>
+        <title>Ansible 多环境参数配置</title>
+        <pubTime>2017-08-02T11:51:48.000Z</pubTime>
+        
+        <tag>Ansible</tag>
+         
+        <tag>environment</tag>
+         
+        <tag>production</tag>
+         
+        <tag>test</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://mittyok.github.io/2017/07/22/emacs-org-mode-cheatsheet/</loc>
-    <lastmod>2017-07-22T11:24:54.000Z</lastmod>
+    <lastmod>2017-10-18T09:38:58.000Z</lastmod>
     <data>
         <display>
         <title>emacs org mode cheatsheet</title>
         <pubTime>2017-07-22T09:11:48.000Z</pubTime>
         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://mittyok.github.io/2017/08/16/lvm-resize/</loc>
+    <lastmod>2017-08-16T11:39:56.000Z</lastmod>
+    <data>
+        <display>
+        <title>lvm_resize</title>
+        <pubTime>2017-08-16T11:36:48.000Z</pubTime>
+        
+        <tag>centos</tag>
+         
+        <tag>logical volume</tag>
+         
+        <tag>part resize</tag>
+         
          
            
         </display>

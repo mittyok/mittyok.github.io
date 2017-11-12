@@ -4,16 +4,109 @@
   
     
     <entry>
+      <title><![CDATA[REST-API-DESIGN-RULEBOOK]]></title>
+      <url>https://mittyok.github.io/2017/11/12/REST-API-DESIGN-RULEBOOK/</url>
+      <content type="html"><![CDATA[<h2 id="API设计最佳实践"><a href="#API设计最佳实践" class="headerlink" title="API设计最佳实践"></a>API设计最佳实践</h2><h3 id="避免在URI中使用下划线"><a href="#避免在URI中使用下划线" class="headerlink" title="避免在URI中使用下划线_"></a>避免在URI中使用下划线<code>_</code></h3><ul>
+<li>在有的应用字体中，下划线并不是很明显，甚至有时候会被完全隐藏掉，看不到。典型的，比如浏览器会把链接用下划线标识以给使用者可点击的暗示，这个时候下划线就会完全被盖掉</li>
+<li>中划线本意有连字符的含义，google会把通过中划线连接的词看为两个词对待，而把下划线连接的词看为一个词对待</li>
+</ul>
+<h3 id="尽量使用小写字母在URI的PATH中"><a href="#尽量使用小写字母在URI的PATH中" class="headerlink" title="尽量使用小写字母在URI的PATH中"></a>尽量使用小写字母在URI的PATH中</h3><p>RFC 3986中有这样的定义，URI中，scheme及host以外的部分均是大小写敏感的，所以如果我们又有大写又有小写会给设计带来不必要的困扰</p>
+<h3 id="在URI中尽量不要包含文件后缀名"><a href="#在URI中尽量不要包含文件后缀名" class="headerlink" title="在URI中尽量不要包含文件后缀名"></a>在URI中尽量不要包含文件后缀名</h3><p>我们不能通过在URI中包含文件后缀的方式表明消息体的格式，而是应该通过media type来指明</p>
+<h3 id="为说有的API使用一致的子域名"><a href="#为说有的API使用一致的子域名" class="headerlink" title="为说有的API使用一致的子域名"></a>为说有的API使用一致的子域名</h3><p>如：api.baidu.com</p>
+<h3 id="为所有的开发之portal提供一致的子域名"><a href="#为所有的开发之portal提供一致的子域名" class="headerlink" title="为所有的开发之portal提供一致的子域名"></a>为所有的开发之portal提供一致的子域名</h3><p>如：developer.baidu.com</p>
+<h2 id="资源原型"><a href="#资源原型" class="headerlink" title="资源原型"></a>资源原型</h2><h3 id="document"><a href="#document" class="headerlink" title="document"></a>document</h3><p>类似一个对象实体或者是数据库记录</p>
+<h3 id="collection"><a href="#collection" class="headerlink" title="collection"></a>collection</h3><p>一组document，服务端控制管理</p>
+<h3 id="store"><a href="#store" class="headerlink" title="store"></a>store</h3><p>客户端控制管理的资源仓库，服务端不需要创建新的URI，客户端决定资源的URI，通过自己的URI存和取</p>
+<h3 id="controller"><a href="#controller" class="headerlink" title="controller"></a>controller</h3><p>具有程序化概念的URI，比如邮件的再次发送：mails/12345/resend</p>
+<h2 id="URI中Path部分的设计"><a href="#URI中Path部分的设计" class="headerlink" title="URI中Path部分的设计"></a>URI中Path部分的设计</h2><p>{collection-c}/{store-s}/{document-d}</p>
+<h3 id="单数名词应该用作document的名字"><a href="#单数名词应该用作document的名字" class="headerlink" title="单数名词应该用作document的名字"></a>单数名词应该用作document的名字</h3><h3 id="复数名词应该用作collection的名字"><a href="#复数名词应该用作collection的名字" class="headerlink" title="复数名词应该用作collection的名字"></a>复数名词应该用作collection的名字</h3><h3 id="复数名词应该用作store的名字"><a href="#复数名词应该用作store的名字" class="headerlink" title="复数名词应该用作store的名字"></a>复数名词应该用作store的名字</h3><h3 id="动词或者动词短语应该用作controller的名字"><a href="#动词或者动词短语应该用作controller的名字" class="headerlink" title="动词或者动词短语应该用作controller的名字"></a>动词或者动词短语应该用作controller的名字</h3><h3 id="URI-Path的变量部分应该用标识ID来替换"><a href="#URI-Path的变量部分应该用标识ID来替换" class="headerlink" title="URI Path的变量部分应该用标识ID来替换"></a>URI Path的变量部分应该用标识ID来替换</h3><p>如：users/{userId}/roles/{roleId}</p>
+<h3 id="CRUD动作名称不要出现在URI的Path中"><a href="#CRUD动作名称不要出现在URI的Path中" class="headerlink" title="CRUD动作名称不要出现在URI的Path中"></a>CRUD动作名称不要出现在URI的Path中</h3><p>POST：新增<br>PUT：修改<br>DELETE：删除<br>GET：查询</p>
+<p>比如，对于删除，不建议使用的URI：<br>GET /deleteUser?id=1234<br>GET /deleteUser/1234<br>DELETE /deleteUser/1234<br>POST /users/1234/delete</p>
+<h2 id="URI查询部分的设计"><a href="#URI查询部分的设计" class="headerlink" title="URI查询部分的设计"></a>URI查询部分的设计</h2><p>RFC 3986 中定义，可选查询部分应该位于Path之后，在fragment之前</p>
+<h3 id="分页查询相关参数应该再查询部分体现"><a href="#分页查询相关参数应该再查询部分体现" class="headerlink" title="分页查询相关参数应该再查询部分体现"></a>分页查询相关参数应该再查询部分体现</h3><h3 id="GET和POST不要与其它methods混用"><a href="#GET和POST不要与其它methods混用" class="headerlink" title="GET和POST不要与其它methods混用"></a>GET和POST不要与其它methods混用</h3><h3 id="GET必须用于获取资源内容"><a href="#GET必须用于获取资源内容" class="headerlink" title="GET必须用于获取资源内容"></a>GET必须用于获取资源内容</h3><h3 id="HEAD应该在只需要获取响应头时使用"><a href="#HEAD应该在只需要获取响应头时使用" class="headerlink" title="HEAD应该在只需要获取响应头时使用"></a>HEAD应该在只需要获取响应头时使用</h3><h3 id="PUT必须用于insert或者update-store的资源"><a href="#PUT必须用于insert或者update-store的资源" class="headerlink" title="PUT必须用于insert或者update store的资源"></a>PUT必须用于insert或者update store的资源</h3><h3 id="PUT必须用于更新可变的资源"><a href="#PUT必须用于更新可变的资源" class="headerlink" title="PUT必须用于更新可变的资源"></a>PUT必须用于更新可变的资源</h3><h3 id="POST必须用于创建新的资源"><a href="#POST必须用于创建新的资源" class="headerlink" title="POST必须用于创建新的资源"></a>POST必须用于创建新的资源</h3><h3 id="POST必须用于执行controller"><a href="#POST必须用于执行controller" class="headerlink" title="POST必须用于执行controller"></a>POST必须用于执行controller</h3><h3 id="DELETE必须用于移除资源"><a href="#DELETE必须用于移除资源" class="headerlink" title="DELETE必须用于移除资源"></a>DELETE必须用于移除资源</h3><h3 id="OPTIONS应该用于获取资源可用的methods"><a href="#OPTIONS应该用于获取资源可用的methods" class="headerlink" title="OPTIONS应该用于获取资源可用的methods"></a>OPTIONS应该用于获取资源可用的methods</h3>]]></content>
+      
+        
+        <tags>
+            
+            <tag> REST API </tag>
+            
+            <tag> API DESIGN </tag>
+            
+            <tag> RULE </tag>
+            
+            <tag> BEST PRACTICE </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[lvm_resize]]></title>
+      <url>https://mittyok.github.io/2017/08/16/lvm-resize/</url>
+      <content type="html"><![CDATA[<ul>
+<li>parted<blockquote>
+<p>print free<br>mkpart</p>
+</blockquote>
+</li>
+<li>fdisk -l</li>
+<li>vgextend -r centos /dev/sda3</li>
+</ul>
+<p>OK 啦</p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> centos </tag>
+            
+            <tag> logical volume </tag>
+            
+            <tag> part resize </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Ansible 多环境参数配置]]></title>
+      <url>https://mittyok.github.io/2017/08/02/Ansible-%E5%A4%9A%E7%8E%AF%E5%A2%83%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE/</url>
+      <content type="html"><![CDATA[<h2 id="正常的定义变量"><a href="#正常的定义变量" class="headerlink" title="正常的定义变量"></a>正常的定义变量</h2><blockquote>
+<p>test_playbook.yml<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- hosts:</span> <span class="string">localhost</span></span><br><span class="line"><span class="attr">  tasks:</span></span><br><span class="line"><span class="attr">  - name:</span> <span class="string">test</span></span><br><span class="line"><span class="attr">    command:</span> <span class="string">echo</span> <span class="string">&#123;&#123;url&#125;&#125;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> Ansible </tag>
+            
+            <tag> environment </tag>
+            
+            <tag> production </tag>
+            
+            <tag> test </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[emacs org mode cheatsheet]]></title>
       <url>https://mittyok.github.io/2017/07/22/emacs-org-mode-cheatsheet/</url>
       <content type="html"><![CDATA[<ul>
-<li>缩略图：TAB<br><img src="http://ogj4ygzvp.bkt.clouddn.com//Untitled.gif-1500722435.gif?imageMogr2/thumbnail/!70p" alt=""></li>
-</ul>
-<p><img src="http://ogj4ygzvp.bkt.clouddn.com//Untitled.gif-1500722659.gif?imageMogr2/thumbnail/!70p" alt=""></p>
+<li><p>缩略图：&lt;TAB&gt;<br><img src="http://ogj4ygzvp.bkt.clouddn.com//Untitled.gif-1500722435.gif?imageMogr2/thumbnail/!70p" alt=""></p>
+</li>
+<li><p>S-&lt;TAB&gt;<br><img src="http://ogj4ygzvp.bkt.clouddn.com//1500732576.png?imageMogr2/thumbnail/!70p" alt=""></p>
 <ul>
-<li>dfs</li>
+<li>C-u &lt;TAB&gt;<br><br>与S-&lt;TAB&gt;效果相同</li>
+<li>C-u C-u &lt;TAB&gt;<br><br>回到最初状态</li>
+<li>C-u C-u C-u &lt;TAB&gt;<br><br>显示所有的内容</li>
+</ul>
+</li>
 </ul>
 ]]></content>
+      
+        
     </entry>
     
     <entry>
@@ -21,6 +114,8 @@
       <url>https://mittyok.github.io/2017/07/19/docker/docker-aaa/</url>
       <content type="html"><![CDATA[<p>Hello</p>
 ]]></content>
+      
+        
     </entry>
     
     <entry>
@@ -47,6 +142,22 @@ from selenium.webdriver.remote.remote_connection import RemoteConnection
 executor = RemoteConnection(&quot;http://seleniumhub.com/wd/hub&quot;, resolve_ip=False)
 chrome = webdriver.Remote(executor, desired_capabilities=DesiredCapabilities.CHROME)
 </code></pre>]]></content>
+      
+        
+        <tags>
+            
+            <tag> Selenium </tag>
+            
+            <tag> Grid </tag>
+            
+            <tag> Cluster </tag>
+            
+            <tag> Automation </tag>
+            
+            <tag> Test </tag>
+            
+        </tags>
+        
     </entry>
     
     <entry>
@@ -100,12 +211,20 @@ ps fauxwww --sort -rss |awk &apos;$1 ~ /(USER|td-agent)/ { print }&apos;
 0.2  7.3
 </code></pre><p>这些数据完全来自我们的生产环境，不是基于某些方面的一些基准测试。从数据上看，Logstash的forwarder明显胜出了Fluentd的Forwarder。但是Fluentd的shipper的表现要远远好于Logstash的shipper，并且在对Logstash令人失望的经验之后，Fluentd使用起来更容易，更可靠。</p>
 ]]></content>
-    </entry>
-    
-    <entry>
-      <title><![CDATA[Spring cloud stream binder rabbitmq]]></title>
-      <url>https://mittyok.github.io/2016/12/28/Spring%20cloud%20stream%20binder%20rabbitmq/</url>
-      <content type="html"><![CDATA[<h2 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;spring-cloud-stream-binder-rabbit&lt;/artifactId&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;spring-cloud-stream&lt;/artifactId&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>]]></content>
+      
+        
+        <tags>
+            
+            <tag> Fluted </tag>
+            
+            <tag> ELK </tag>
+            
+            <tag> Logstash </tag>
+            
+            <tag> Log </tag>
+            
+        </tags>
+        
     </entry>
     
     <entry>
@@ -116,6 +235,36 @@ ps fauxwww --sort -rss |awk &apos;$1 ~ /(USER|td-agent)/ { print }&apos;
 </blockquote>
 <p>为了实现系统的高伸缩性，我们需要设计一个合适的路由拓扑。我们需要考虑很多的细节，比如：消息实现环境中存在的问题及限制，性能策略等。</p>
 ]]></content>
+      
+        
+        <tags>
+            
+            <tag> rabbitmq </tag>
+            
+            <tag> performance </tag>
+            
+            <tag> routing </tag>
+            
+            <tag> scalability </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Spring cloud stream binder rabbitmq]]></title>
+      <url>https://mittyok.github.io/2016/12/28/Spring%20cloud%20stream%20binder%20rabbitmq/</url>
+      <content type="html"><![CDATA[<h2 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-cloud-stream-binder-rabbit&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-cloud-stream&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>]]></content>
+      
+        
+        <tags>
+            
+            <tag> rabbitmq </tag>
+            
+            <tag> spring cloud stream </tag>
+            
+        </tags>
+        
     </entry>
     
     <entry>
@@ -125,8 +274,8 @@ ps fauxwww --sort -rss |awk &apos;$1 ~ /(USER|td-agent)/ { print }&apos;
 <p>fdisk -l</p>
 <p>df</p>
 </blockquote>
-<h2 id="Hard-disk-format-vmdk-to-vdi"><a href="#Hard-disk-format-vmdk-to-vdi" class="headerlink" title="Hard disk format: vmdk to vdi"></a>Hard disk format: vmdk to vdi</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">VBoxManage clonehd disk.vmdk disk.vdi --format vdi</div></pre></td></tr></table></figure>
-<h2 id="Hard-disk-resize"><a href="#Hard-disk-resize" class="headerlink" title="Hard disk resize"></a>Hard disk resize</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vboxmanage modifyhd --resize 20000 ./New_VM.vdi</div></pre></td></tr></table></figure>
+<h2 id="Hard-disk-format-vmdk-to-vdi"><a href="#Hard-disk-format-vmdk-to-vdi" class="headerlink" title="Hard disk format: vmdk to vdi"></a>Hard disk format: vmdk to vdi</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">VBoxManage clonehd disk.vmdk disk.vdi --format vdi</span><br></pre></td></tr></table></figure>
+<h2 id="Hard-disk-resize"><a href="#Hard-disk-resize" class="headerlink" title="Hard disk resize"></a>Hard disk resize</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vboxmanage modifyhd --resize 20000 ./New_VM.vdi</span><br></pre></td></tr></table></figure>
 <h2 id="Resize-the-partition"><a href="#Resize-the-partition" class="headerlink" title="Resize the partition"></a>Resize the partition</h2><h3 id="Download-Gparted-iso"><a href="#Download-Gparted-iso" class="headerlink" title="Download Gparted.iso"></a>Download Gparted.iso</h3><p><a href="http://gparted.org/download.php" target="_blank" rel="external">Download GParted</a></p>
 <blockquote>
 <p>启动时加载GParted.iso，就可以进行分区管理啦。。。</p>
@@ -136,6 +285,20 @@ ps fauxwww --sort -rss |awk &apos;$1 ~ /(USER|td-agent)/ { print }&apos;
 <p>大家可以看下这里学习一下：<br><a href="https://wiki.archlinux.org/index.php/LVM_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87" target="_blank" rel="external">LVM相关介绍</a>)</p>
 </blockquote>
 ]]></content>
+      
+        
+        <tags>
+            
+            <tag> virtualbox </tag>
+            
+            <tag> resize </tag>
+            
+            <tag> hard disk </tag>
+            
+            <tag> lvm </tag>
+            
+        </tags>
+        
     </entry>
     
     <entry>
@@ -148,9 +311,9 @@ ps fauxwww --sort -rss |awk &apos;$1 ~ /(USER|td-agent)/ { print }&apos;
 <li>security, various types of database, data integration, and now cloud-native microservices</li>
 <li>spring is headed now with regard to reactive programming.</li>
 </ul>
-<h2 id="H2"><a href="#H2" class="headerlink" title="H2"></a>H2</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">The development of H2 was started in May 2004, but it was first published on December 14th 2005. The main author of H2, Thomas Mueller, is also the original developer of Hypersonic SQL. In 2001, he joined PointBase Inc. where he wrote PointBase Micro, a commercial Java SQL database. At that point, he had to discontinue Hypersonic SQL. The HSQLDB Group was formed to continued to work on the Hypersonic SQL codebase. The name H2 stands for Hypersonic 2, however H2 does not share code with Hypersonic SQL or HSQLDB. H2 is built from scratch.</div></pre></td></tr></table></figure>
-<h2 id="Spring-Cloud-Task"><a href="#Spring-Cloud-Task" class="headerlink" title="Spring Cloud Task"></a>Spring Cloud Task</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Spring Cloud Task allows a user to develop and run short lived microservices using Spring Cloud and run them locally, in the cloud, even on Spring Cloud Data Flow. Just add @EnableTask and run your app as a Spring Boot app (single application context).</div></pre></td></tr></table></figure>
-<h2 id="Task-Demo"><a href="#Task-Demo" class="headerlink" title="Task Demo"></a>Task Demo</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">@SpringBootApplication</div><div class="line">@EnableTask</div><div class="line">public class SampleTask &#123;</div><div class="line"></div><div class="line">    @Bean</div><div class="line">    CommandLineRunner commandLineRunner() &#123;</div><div class="line">        return new HelloWorldCommandLineRunner();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        SpringApplication.run(SampleTask.class, args);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private class HelloWorldCommandLineRunner implements CommandLineRunner &#123;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void run(String... strings) throws Exception &#123;</div><div class="line">            System.out.println(&quot;Hello World!&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="H2"><a href="#H2" class="headerlink" title="H2"></a>H2</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The development of H2 was started in May 2004, but it was first published on December 14th 2005. The main author of H2, Thomas Mueller, is also the original developer of Hypersonic SQL. In 2001, he joined PointBase Inc. where he wrote PointBase Micro, a commercial Java SQL database. At that point, he had to discontinue Hypersonic SQL. The HSQLDB Group was formed to continued to work on the Hypersonic SQL codebase. The name H2 stands for Hypersonic 2, however H2 does not share code with Hypersonic SQL or HSQLDB. H2 is built from scratch.</span><br></pre></td></tr></table></figure>
+<h2 id="Spring-Cloud-Task"><a href="#Spring-Cloud-Task" class="headerlink" title="Spring Cloud Task"></a>Spring Cloud Task</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Spring Cloud Task allows a user to develop and run short lived microservices using Spring Cloud and run them locally, in the cloud, even on Spring Cloud Data Flow. Just add @EnableTask and run your app as a Spring Boot app (single application context).</span><br></pre></td></tr></table></figure>
+<h2 id="Task-Demo"><a href="#Task-Demo" class="headerlink" title="Task Demo"></a>Task Demo</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@SpringBootApplication</span><br><span class="line">@EnableTask</span><br><span class="line">public class SampleTask &#123;</span><br><span class="line"></span><br><span class="line">    @Bean</span><br><span class="line">    CommandLineRunner commandLineRunner() &#123;</span><br><span class="line">        return new HelloWorldCommandLineRunner();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        SpringApplication.run(SampleTask.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private class HelloWorldCommandLineRunner implements CommandLineRunner &#123;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void run(String... strings) throws Exception &#123;</span><br><span class="line">            System.out.println(&quot;Hello World!&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="Spring-Batch"><a href="#Spring-Batch" class="headerlink" title="Spring Batch"></a>Spring Batch</h2><p>在一些特定的情况下，我们会有这样的需求，我们需要批量的执行一些业务操作。这些业务操作一般都有这样的特点：</p>
 <ol>
 <li>涉及到的数据量较大</li>
@@ -170,10 +333,26 @@ ps fauxwww --sort -rss |awk &apos;$1 ~ /(USER|td-agent)/ { print }&apos;
 <h2 id="Concept"><a href="#Concept" class="headerlink" title="Concept"></a>Concept</h2><p>1 Job = Many Steps<br>1 Step = 1 REAT-PROCESS-WRITE or 1 Tasklet</p>
 <p>Job = {Step 1 -&gt; Step 2 -&gt; Step 3}</p>
 <h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><p>Example code.</p>
-<h3 id="Main-Class"><a href="#Main-Class" class="headerlink" title="Main Class"></a>Main Class</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@EnableTask</div><div class="line">@EnableBatchProcessing</div><div class="line">@SpringBootApplication</div><div class="line">public class BatchJobApplication &#123;</div><div class="line"> </div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        SpringApplication.run(BatchJobApplication.class, args);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="Job-Configuration"><a href="#Job-Configuration" class="headerlink" title="Job Configuration"></a>Job Configuration</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">@Configuration</div><div class="line">public class JobConfiguration &#123;</div><div class="line"> </div><div class="line">    private static Log logger</div><div class="line">      = LogFactory.getLog(JobConfiguration.class);</div><div class="line"> </div><div class="line">    @Autowired</div><div class="line">    public JobBuilderFactory jobBuilderFactory;</div><div class="line"> </div><div class="line">    @Autowired</div><div class="line">    public StepBuilderFactory stepBuilderFactory;</div><div class="line"> </div><div class="line">    @Bean</div><div class="line">    public Job job() &#123;</div><div class="line">        return jobBuilderFactory.get(&quot;job&quot;)</div><div class="line">          .start(stepBuilderFactory.get(&quot;jobStep1&quot;)</div><div class="line">          .tasklet(new Tasklet() &#123;</div><div class="line">             </div><div class="line">              @Override</div><div class="line">              public RepeatStatus execute(StepContribution contribution, </div><div class="line">                ChunkContext chunkContext) throws Exception &#123;</div><div class="line">                 </div><div class="line">                logger.info(&quot;Job was run&quot;);</div><div class="line">                return RepeatStatus.FINISHED;</div><div class="line">              &#125;</div><div class="line">        &#125;).build()).build();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="Chunk-Oriented-Processing"><a href="#Chunk-Oriented-Processing" class="headerlink" title="Chunk-Oriented Processing"></a>Chunk-Oriented Processing</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Chunk oriented processing refers to reading the data one at a time, and creating &apos;chunks&apos; that will be written out, within a transaction boundary.</div></pre></td></tr></table></figure>
+<h3 id="Main-Class"><a href="#Main-Class" class="headerlink" title="Main Class"></a>Main Class</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@EnableTask</span><br><span class="line">@EnableBatchProcessing</span><br><span class="line">@SpringBootApplication</span><br><span class="line">public class BatchJobApplication &#123;</span><br><span class="line"> </span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        SpringApplication.run(BatchJobApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Job-Configuration"><a href="#Job-Configuration" class="headerlink" title="Job Configuration"></a>Job Configuration</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">@Configuration</span><br><span class="line">public class JobConfiguration &#123;</span><br><span class="line"> </span><br><span class="line">    private static Log logger</span><br><span class="line">      = LogFactory.getLog(JobConfiguration.class);</span><br><span class="line"> </span><br><span class="line">    @Autowired</span><br><span class="line">    public JobBuilderFactory jobBuilderFactory;</span><br><span class="line"> </span><br><span class="line">    @Autowired</span><br><span class="line">    public StepBuilderFactory stepBuilderFactory;</span><br><span class="line"> </span><br><span class="line">    @Bean</span><br><span class="line">    public Job job() &#123;</span><br><span class="line">        return jobBuilderFactory.get(&quot;job&quot;)</span><br><span class="line">          .start(stepBuilderFactory.get(&quot;jobStep1&quot;)</span><br><span class="line">          .tasklet(new Tasklet() &#123;</span><br><span class="line">             </span><br><span class="line">              @Override</span><br><span class="line">              public RepeatStatus execute(StepContribution contribution, </span><br><span class="line">                ChunkContext chunkContext) throws Exception &#123;</span><br><span class="line">                 </span><br><span class="line">                logger.info(&quot;Job was run&quot;);</span><br><span class="line">                return RepeatStatus.FINISHED;</span><br><span class="line">              &#125;</span><br><span class="line">        &#125;).build()).build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Chunk-Oriented-Processing"><a href="#Chunk-Oriented-Processing" class="headerlink" title="Chunk-Oriented Processing"></a>Chunk-Oriented Processing</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Chunk oriented processing refers to reading the data one at a time, and creating &apos;chunks&apos; that will be written out, within a transaction boundary.</span><br></pre></td></tr></table></figure>
 <h2 id="Spring-Cloud-Dataflow"><a href="#Spring-Cloud-Dataflow" class="headerlink" title="Spring Cloud Dataflow"></a>Spring Cloud Dataflow</h2><h3 id="Tap"><a href="#Tap" class="headerlink" title="Tap"></a>Tap</h3>]]></content>
+      
+        
+        <tags>
+            
+            <tag> spring cloud </tag>
+            
+            <tag> dataflow </tag>
+            
+            <tag> task </tag>
+            
+            <tag> batch </tag>
+            
+            <tag> job </tag>
+            
+        </tags>
+        
     </entry>
     
     <entry>
@@ -188,6 +367,16 @@ ps fauxwww --sort -rss |awk &apos;$1 ~ /(USER|td-agent)/ { print }&apos;
 </blockquote>
 <p>可以看到，CQRS与我们当今主流的开发结构有很大的差距，自然就很难理解。对于开发者而言，学习使用这种架构走一些弯路就再正常不过了。这也正是Axon Framework诞生的初衷：帮助开发者轻松的事项CQRS模式，从而把更多的时间和精力花在实际业务上。</p>
 ]]></content>
+      
+        
+        <tags>
+            
+            <tag> axon framework </tag>
+            
+            <tag> event sourcing </tag>
+            
+        </tags>
+        
     </entry>
     
     <entry>
@@ -207,26 +396,64 @@ ps fauxwww --sort -rss |awk &apos;$1 ~ /(USER|td-agent)/ { print }&apos;
 <li>出道——进入正常使用阶段。正常音就是你耳朵听上去最舒服的音量 请参考以上煲机方法</li>
 </ol>
 ]]></content>
+      
+        
+        <tags>
+            
+            <tag> 耳机 </tag>
+            
+            <tag> 煲机 </tag>
+            
+        </tags>
+        
     </entry>
     
     <entry>
       <title><![CDATA[Schema-Generator-By-JPA]]></title>
       <url>https://mittyok.github.io/2016/11/16/Schema-Generator-By-JPA/</url>
-      <content type="html"><![CDATA[<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line">&lt;!-- /////// START JPA Schema Generator --&gt;</div><div class="line">&lt;plugin&gt;</div><div class="line">    &lt;groupId&gt;io.github.divinespear&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;jpa-schema-maven-plugin&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;0.2.0&lt;/version&gt;</div><div class="line">    &lt;executions&gt;</div><div class="line">    &lt;/executions&gt;</div><div class="line">    &lt;configuration&gt;</div><div class="line">    &lt;jdbcUrl&gt;这里配置jdbcurl&lt;/jdbcUrl&gt;</div><div class="line">    &lt;jdbcUser&gt;数据库用户名&lt;/jdbcUser&gt;</div><div class="line">    &lt;jdbcPassword&gt;数据库密码&lt;/jdbcPassword&gt;</div><div class="line">    &lt;!-- 这里需要指定JPA的实现提供者 --&gt;</div><div class="line">    &lt;vendor&gt;hibernate&lt;/vendor&gt;</div><div class="line">    &lt;!--&lt;databaseAction&gt;create&lt;/databaseAction&gt;--&gt;</div><div class="line">    &lt;scriptAction&gt;drop-and-create&lt;/scriptAction&gt;</div><div class="line">    &lt;!--&lt;scriptAction&gt;$&#123;AAA&#125;&lt;/scriptAction&gt;--&gt;</div><div class="line">    &lt;packageToScan&gt;指定要扫描实体的包路径&lt;/packageToScan&gt;</div><div class="line">    &lt;properties&gt;</div><div class="line">        &lt;hibernate.dialect&gt;org.hibernate.dialect.MySQL5Dialect&lt;/hibernate.dialect&gt;</div><div class="line">    &lt;/properties&gt;</div><div class="line">&lt;/configuration&gt;</div><div class="line">    &lt;dependencies&gt;</div><div class="line">        &lt;!-- https://mvnrepository.com/artifact/org.eclipse.persistence/eclipselink --&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.eclipse.persistence&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;eclipselink&lt;/artifactId&gt;</div><div class="line">            &lt;version&gt;2.6.4&lt;/version&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.hibernate&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;hibernate-core&lt;/artifactId&gt;</div><div class="line">            &lt;version&gt;5.0.9.Final&lt;/version&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.hibernate&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;hibernate-entitymanager&lt;/artifactId&gt;</div><div class="line">            &lt;version&gt;5.0.9.Final&lt;/version&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.hibernate.javax.persistence&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;hibernate-jpa-2.1-api&lt;/artifactId&gt;</div><div class="line">            &lt;version&gt;1.0.0.Final&lt;/version&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;mysql&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;</div><div class="line">            &lt;version&gt;5.1.39&lt;/version&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">    &lt;/dependencies&gt;</div><div class="line">&lt;/plugin&gt;</div><div class="line">&lt;!-- JPA Schema Generator END ///////// --&gt;</div></pre></td></tr></table></figure>
+      <content type="html"><![CDATA[<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- /////// START JPA Schema Generator --&gt;</span><br><span class="line">&lt;plugin&gt;</span><br><span class="line">    &lt;groupId&gt;io.github.divinespear&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;jpa-schema-maven-plugin&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;0.2.0&lt;/version&gt;</span><br><span class="line">    &lt;executions&gt;</span><br><span class="line">    &lt;/executions&gt;</span><br><span class="line">    &lt;configuration&gt;</span><br><span class="line">    &lt;jdbcUrl&gt;这里配置jdbcurl&lt;/jdbcUrl&gt;</span><br><span class="line">    &lt;jdbcUser&gt;数据库用户名&lt;/jdbcUser&gt;</span><br><span class="line">    &lt;jdbcPassword&gt;数据库密码&lt;/jdbcPassword&gt;</span><br><span class="line">    &lt;!-- 这里需要指定JPA的实现提供者 --&gt;</span><br><span class="line">    &lt;vendor&gt;hibernate&lt;/vendor&gt;</span><br><span class="line">    &lt;!--&lt;databaseAction&gt;create&lt;/databaseAction&gt;--&gt;</span><br><span class="line">    &lt;scriptAction&gt;drop-and-create&lt;/scriptAction&gt;</span><br><span class="line">    &lt;!--&lt;scriptAction&gt;$&#123;AAA&#125;&lt;/scriptAction&gt;--&gt;</span><br><span class="line">    &lt;packageToScan&gt;指定要扫描实体的包路径&lt;/packageToScan&gt;</span><br><span class="line">    &lt;properties&gt;</span><br><span class="line">        &lt;hibernate.dialect&gt;org.hibernate.dialect.MySQL5Dialect&lt;/hibernate.dialect&gt;</span><br><span class="line">    &lt;/properties&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br><span class="line">    &lt;dependencies&gt;</span><br><span class="line">        &lt;!-- https://mvnrepository.com/artifact/org.eclipse.persistence/eclipselink --&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.eclipse.persistence&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;eclipselink&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;2.6.4&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.hibernate&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;hibernate-core&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;5.0.9.Final&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.hibernate&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;hibernate-entitymanager&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;5.0.9.Final&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.hibernate.javax.persistence&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;hibernate-jpa-2.1-api&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;1.0.0.Final&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;mysql&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;5.1.39&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">    &lt;/dependencies&gt;</span><br><span class="line">&lt;/plugin&gt;</span><br><span class="line">&lt;!-- JPA Schema Generator END ///////// --&gt;</span><br></pre></td></tr></table></figure>
 <p>相关配置可以参照：<a href="http://divinespear.github.io/jpa-schema-maven-plugin/generate-mojo.html" target="_blank" rel="external">jpa-schema-plugin</a></p>
 ]]></content>
+      
+        
+        <tags>
+            
+            <tag> database </tag>
+            
+            <tag> ddl </tag>
+            
+            <tag> hebernate </tag>
+            
+            <tag> eclipselink </tag>
+            
+            <tag> jpa </tag>
+            
+        </tags>
+        
     </entry>
     
     <entry>
       <title><![CDATA[Hazelcast_Jcache_Implementation]]></title>
       <url>https://mittyok.github.io/2016/11/14/Hazelcast-Jcache-Implementation/</url>
-      <content type="html"><![CDATA[<h2 id="加入JCache依赖"><a href="#加入JCache依赖" class="headerlink" title="加入JCache依赖"></a>加入JCache依赖</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">  &lt;groupId&gt;javax.cache&lt;/groupId&gt;</div><div class="line">  &lt;artifactId&gt;cache-api&lt;/artifactId&gt;</div><div class="line">  &lt;version&gt;1.0.0&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+      <content type="html"><![CDATA[<h2 id="加入JCache依赖"><a href="#加入JCache依赖" class="headerlink" title="加入JCache依赖"></a>加入JCache依赖</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">  &lt;groupId&gt;javax.cache&lt;/groupId&gt;</span><br><span class="line">  &lt;artifactId&gt;cache-api&lt;/artifactId&gt;</span><br><span class="line">  &lt;version&gt;1.0.0&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
 <h2 id="加入Hazelcast依赖"><a href="#加入Hazelcast依赖" class="headerlink" title="加入Hazelcast依赖"></a>加入Hazelcast依赖</h2><ol>
 <li>If hazelcast-\<version>.jar is added to the classpath, Hazelcast can only be used as a server provider.</version></li>
 <li>If hazelcast-client-\<version>.jar is added to the classpath, default provider is the client one.</version></li>
 <li>If hazelcast-all-\<version>.jar is added to the classpath, default provider is again the client one.</version></li>
 </ol>
 ]]></content>
+      
+        
+        <tags>
+            
+            <tag> hazelcast </tag>
+            
+            <tag> spring cloud </tag>
+            
+            <tag> jcache </tag>
+            
+        </tags>
+        
     </entry>
     
     <entry>
@@ -252,7 +479,7 @@ ps fauxwww --sort -rss |awk &apos;$1 ~ /(USER|td-agent)/ { print }&apos;
 <ol>
 <li>resources下加入<code>conf</code>文件夹，建立application.yml文件，加入如下内容：</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">application:</div><div class="line">  name: mittyok-test</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">application:</span><br><span class="line">  name: mittyok-test</span><br></pre></td></tr></table></figure>
 <ol>
 <li>在目录下执行：<code>./mvnw package</code></li>
 <li>到<code>target</code>目录下面</li>
@@ -268,9 +495,9 @@ ps fauxwww --sort -rss |awk &apos;$1 ~ /(USER|td-agent)/ { print }&apos;
 <p>  <strong>pom.xml</strong></p>
 </li>
 </ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- 通过此消息中间件广播 --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-stream-rabbit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0.2.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div><div class="line"><span class="comment">&lt;!-- 事件总线，监听及处理cloud中的一些事件，如通过/monitor传入的操作 --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-bus<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div><div class="line"><span class="comment">&lt;!-- 使服务暴露/monitor endpoint 以方便外部触发监听事件 --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-config-monitor<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1.2.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 通过此消息中间件广播 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-stream-rabbit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0.2.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 事件总线，监听及处理cloud中的一些事件，如通过/monitor传入的操作 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-bus<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 使服务暴露/monitor endpoint 以方便外部触发监听事件 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-config-monitor<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1.2.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p><strong>bootstrap.yml</strong></p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attr">spring:</span></div><div class="line"><span class="attr">  rabbitmq:</span></div><div class="line"><span class="attr">    addresses:</span> <span class="number">192.168</span><span class="number">.99</span><span class="number">.100</span>:<span class="number">5672</span> <span class="comment"># rabbitmq地址</span></div><div class="line"><span class="attr">    username:</span> admin <span class="comment"># 用户名</span></div><div class="line"><span class="attr">    password:</span> admin <span class="comment"># 密码</span></div></pre></td></tr></table></figure>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  rabbitmq:</span></span><br><span class="line"><span class="attr">    addresses:</span> <span class="number">192.168</span><span class="number">.99</span><span class="number">.100</span><span class="string">:5672</span> <span class="comment"># rabbitmq地址</span></span><br><span class="line"><span class="attr">    username:</span> <span class="string">admin</span> <span class="comment"># 用户名</span></span><br><span class="line"><span class="attr">    password:</span> <span class="string">admin</span> <span class="comment"># 密码</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>Config Client端与服务端配置基本一致，但是不需要暴露/monitor endpoint</li>
 </ul>
@@ -280,6 +507,18 @@ ps fauxwww --sort -rss |awk &apos;$1 ~ /(USER|td-agent)/ { print }&apos;
 </blockquote>
 </blockquote>
 <h2 id="待续"><a href="#待续" class="headerlink" title="待续"></a>待续</h2>]]></content>
+      
+        
+        <tags>
+            
+            <tag> spring cloud </tag>
+            
+            <tag> config server </tag>
+            
+            <tag> config client </tag>
+            
+        </tags>
+        
     </entry>
     
     <entry>
@@ -288,24 +527,60 @@ ps fauxwww --sort -rss |awk &apos;$1 ~ /(USER|td-agent)/ { print }&apos;
       <content type="html"><![CDATA[<blockquote>
 <p>基于Springboot 1.4</p>
 </blockquote>
-<h2 id="配置依赖"><a href="#配置依赖" class="headerlink" title="配置依赖"></a>配置依赖</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.bgee.log4jdbc-log4j2/log4jdbc-log4j2 --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.bgee.log4jdbc-log4j2<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>log4jdbc-log4j2-jdbc4.1<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.16<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div></pre></td></tr></table></figure>
-<h2 id="配置驱动"><a href="#配置驱动" class="headerlink" title="配置驱动"></a>配置驱动</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">spring.datasource.driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy</div></pre></td></tr></table></figure>
-<h2 id="配置Log探测器"><a href="#配置Log探测器" class="headerlink" title="配置Log探测器"></a>配置Log探测器</h2><p>在classpath下建一个文件，命名为：<em>log4jdbc.log4j2.properties</em>。添加如下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">log4jdbc.spylogdelegator.name=net.sf.log4jdbc.log.slf4j.Slf4jSpyLogDelegator</div></pre></td></tr></table></figure></p>
+<h2 id="配置依赖"><a href="#配置依赖" class="headerlink" title="配置依赖"></a>配置依赖</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.bgee.log4jdbc-log4j2/log4jdbc-log4j2 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.bgee.log4jdbc-log4j2<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>log4jdbc-log4j2-jdbc4.1<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.16<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="配置驱动"><a href="#配置驱动" class="headerlink" title="配置驱动"></a>配置驱动</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spring.datasource.driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy</span><br></pre></td></tr></table></figure>
+<h2 id="配置Log探测器"><a href="#配置Log探测器" class="headerlink" title="配置Log探测器"></a>配置Log探测器</h2><p>在classpath下建一个文件，命名为：<em>log4jdbc.log4j2.properties</em>。添加如下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">log4jdbc.spylogdelegator.name=net.sf.log4jdbc.log.slf4j.Slf4jSpyLogDelegator</span><br></pre></td></tr></table></figure></p>
 <p>OK啦，启动吧，现在应该有效果了。</p>
 <p><strong>太详细的，大家再到网上看一下吧。。。</strong></p>
-<p><strong><em>需要注意的一些日志配置</em></strong><br>Log4jdbc 用以下几个可以配置的日志种类：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">jdbc.sqlonly : 仅记录 SQL</div><div class="line">jdbc.sqltiming ：记录 SQL 以及耗时信息</div><div class="line">jdbc.audit ：记录除了 ResultSet 之外的所有 JDBC 调用信息，会产生大量的记录，有利于调试跟踪具体的 JDBC 问题</div><div class="line">jdbc.resultset ：会产生更多的记录信息，因为记录了 ResultSet 的信息</div><div class="line">jdbc.connection ：记录连接打开、关闭等信息，有利于调试数据库连接相关问题</div></pre></td></tr></table></figure></p>
-<p>配置形式可参考如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">log4j.logger.jdbc.sqlonly=OFF</div><div class="line">log4j.logger.jdbc.sqltiming=INFO</div><div class="line">log4j.logger.jdbc.audit=OFF</div><div class="line">log4j.logger.jdbc.resultset=OFF</div><div class="line">log4j.logger.jdbc.connection=OFF</div></pre></td></tr></table></figure></p>
+<p><strong><em>需要注意的一些日志配置</em></strong><br>Log4jdbc 用以下几个可以配置的日志种类：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">jdbc.sqlonly : 仅记录 SQL</span><br><span class="line">jdbc.sqltiming ：记录 SQL 以及耗时信息</span><br><span class="line">jdbc.audit ：记录除了 ResultSet 之外的所有 JDBC 调用信息，会产生大量的记录，有利于调试跟踪具体的 JDBC 问题</span><br><span class="line">jdbc.resultset ：会产生更多的记录信息，因为记录了 ResultSet 的信息</span><br><span class="line">jdbc.connection ：记录连接打开、关闭等信息，有利于调试数据库连接相关问题</span><br></pre></td></tr></table></figure></p>
+<p>配置形式可参考如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">log4j.logger.jdbc.sqlonly=OFF</span><br><span class="line">log4j.logger.jdbc.sqltiming=INFO</span><br><span class="line">log4j.logger.jdbc.audit=OFF</span><br><span class="line">log4j.logger.jdbc.resultset=OFF</span><br><span class="line">log4j.logger.jdbc.connection=OFF</span><br></pre></td></tr></table></figure></p>
 ]]></content>
+      
+        
+        <tags>
+            
+            <tag> log4j </tag>
+            
+            <tag> sql </tag>
+            
+            <tag> tuning </tag>
+            
+            <tag> springboot </tag>
+            
+        </tags>
+        
     </entry>
     
     <entry>
       <title><![CDATA[jpa-schema-maven-plugin_guide]]></title>
       <url>https://mittyok.github.io/2016/10/01/jpa-schema-maven-plugin-guide/</url>
-      <content type="html"><![CDATA[<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- /////// START JPA Schema Generator --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">plugin</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.github.divinespear<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jpa-schema-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.2.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">jdbcUrl</span>&gt;</span>jdbc:mysql://192.168.99.100:3306/dawnorder<span class="tag">&lt;/<span class="name">jdbcUrl</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">jdbcUser</span>&gt;</span>root<span class="tag">&lt;/<span class="name">jdbcUser</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">jdbcPassword</span>&gt;</span>dawn12345678<span class="tag">&lt;/<span class="name">jdbcPassword</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">vendor</span>&gt;</span>hibernate<span class="tag">&lt;/<span class="name">vendor</span>&gt;</span></div><div class="line">        <span class="comment">&lt;!--&lt;databaseAction&gt;create&lt;/databaseAction&gt;--&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">scriptAction</span>&gt;</span>drop-and-create<span class="tag">&lt;/<span class="name">scriptAction</span>&gt;</span></div><div class="line">        <span class="comment">&lt;!--&lt;scriptAction&gt;$&#123;AAA&#125;&lt;/scriptAction&gt;--&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">packageToScan</span>&gt;</span>com.huobi.dawn.common.entity<span class="tag">&lt;/<span class="name">packageToScan</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">properties</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">hibernate.dialect</span>&gt;</span>org.hibernate.dialect.MySQL5Dialect<span class="tag">&lt;/<span class="name">hibernate.dialect</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">properties</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">executions</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">executions</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></div><div class="line">        <span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.eclipse.persistence/eclipselink --&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.eclipse.persistence<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>eclipselink<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.6.4<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.hibernate<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hibernate-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.0.9.Final<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.hibernate<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hibernate-entitymanager<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.0.9.Final<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.hibernate.javax.persistence<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hibernate-jpa-2.1-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0.0.Final<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.1.39<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></div><div class="line"><span class="comment">&lt;!-- JPA Schema Generator END ///////// --&gt;</span></div></pre></td></tr></table></figure>
+      <content type="html"><![CDATA[<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- /////// START JPA Schema Generator --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.github.divinespear<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jpa-schema-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.2.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">jdbcUrl</span>&gt;</span>jdbc:mysql://192.168.99.100:3306/dawnorder<span class="tag">&lt;/<span class="name">jdbcUrl</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">jdbcUser</span>&gt;</span>root<span class="tag">&lt;/<span class="name">jdbcUser</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">jdbcPassword</span>&gt;</span>dawn12345678<span class="tag">&lt;/<span class="name">jdbcPassword</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">vendor</span>&gt;</span>hibernate<span class="tag">&lt;/<span class="name">vendor</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--&lt;databaseAction&gt;create&lt;/databaseAction&gt;--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">scriptAction</span>&gt;</span>drop-and-create<span class="tag">&lt;/<span class="name">scriptAction</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--&lt;scriptAction&gt;$&#123;AAA&#125;&lt;/scriptAction&gt;--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">packageToScan</span>&gt;</span>com.huobi.dawn.common.entity<span class="tag">&lt;/<span class="name">packageToScan</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">properties</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">hibernate.dialect</span>&gt;</span>org.hibernate.dialect.MySQL5Dialect<span class="tag">&lt;/<span class="name">hibernate.dialect</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">executions</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">executions</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.eclipse.persistence/eclipselink --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.eclipse.persistence<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>eclipselink<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.6.4<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.hibernate<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hibernate-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.0.9.Final<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.hibernate<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hibernate-entitymanager<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.0.9.Final<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.hibernate.javax.persistence<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hibernate-jpa-2.1-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0.0.Final<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.1.39<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- JPA Schema Generator END ///////// --&gt;</span></span><br></pre></td></tr></table></figure>
 <h1 id="执行"><a href="#执行" class="headerlink" title="执行"></a>执行</h1><blockquote>
 <p>mvn jpa-schema:generate</p>
 </blockquote>
 ]]></content>
+      
+        <categories>
+            
+            <category> maven </category>
+            
+            <category> ddl </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> ddl </tag>
+            
+            <tag> maven </tag>
+            
+            <tag> hibernate </tag>
+            
+            <tag> schema </tag>
+            
+        </tags>
+        
     </entry>
     
     <entry>
@@ -323,8 +598,8 @@ ps fauxwww --sort -rss |awk &apos;$1 ~ /(USER|td-agent)/ { print }&apos;
 <li>分布式集群状态管理</li>
 </ul>
 <p>Spring Cloud是构建在Spring Boot的基础之上的。通过引入一大堆基于Spring Boot相关的依赖来为单独的一个应用提供对应的功能。我们可以利用Spring Cloud提供的基础实现快速体验一下，当然了，如果我们以后得心应手了，我们可以轻松的做出自己的解决方案，或者对默认方案做一些干预，以达到我们自己的目的。</p>
-<h1 id="愉快的开始吧"><a href="#愉快的开始吧" class="headerlink" title="愉快的开始吧"></a>愉快的开始吧</h1><p>先看一看这个POM文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">&lt;parent&gt;</div><div class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;1.3.7.RELEASE&lt;/version&gt;</div><div class="line">&lt;/parent&gt;</div><div class="line">&lt;dependencyManagement&gt;</div><div class="line">    &lt;dependencies&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;</div><div class="line">            &lt;version&gt;Brixton.SR6&lt;/version&gt;</div><div class="line">            &lt;type&gt;pom&lt;/type&gt;</div><div class="line">            &lt;scope&gt;import&lt;/scope&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">    &lt;/dependencies&gt;</div><div class="line">&lt;/dependencyManagement&gt;</div><div class="line">&lt;dependencies&gt;</div><div class="line">    &lt;dependency&gt;</div><div class="line">        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">        &lt;artifactId&gt;spring-cloud-starter-config&lt;/artifactId&gt;</div><div class="line">    &lt;/dependency&gt;</div><div class="line">    &lt;dependency&gt;</div><div class="line">        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">        &lt;artifactId&gt;spring-cloud-starter-eureka&lt;/artifactId&gt;</div><div class="line">    &lt;/dependency&gt;</div><div class="line">&lt;/dependencies&gt;</div></pre></td></tr></table></figure></p>
-<p>可以看到，我们只是依赖了一个“spring-cloud-dependencies”，其他的依赖都会在父依赖中体现，也就是在这里：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;parent&gt;</div><div class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;1.3.7.RELEASE&lt;/version&gt;</div><div class="line">&lt;/parent&gt;</div></pre></td></tr></table></figure></p>
+<h1 id="愉快的开始吧"><a href="#愉快的开始吧" class="headerlink" title="愉快的开始吧"></a>愉快的开始吧</h1><p>先看一看这个POM文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;parent&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;1.3.7.RELEASE&lt;/version&gt;</span><br><span class="line">&lt;/parent&gt;</span><br><span class="line">&lt;dependencyManagement&gt;</span><br><span class="line">    &lt;dependencies&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;Brixton.SR6&lt;/version&gt;</span><br><span class="line">            &lt;type&gt;pom&lt;/type&gt;</span><br><span class="line">            &lt;scope&gt;import&lt;/scope&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">    &lt;/dependencies&gt;</span><br><span class="line">&lt;/dependencyManagement&gt;</span><br><span class="line">&lt;dependencies&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;spring-cloud-starter-config&lt;/artifactId&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;spring-cloud-starter-eureka&lt;/artifactId&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">&lt;/dependencies&gt;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，我们只是依赖了一个“spring-cloud-dependencies”，其他的依赖都会在父依赖中体现，也就是在这里：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;parent&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;1.3.7.RELEASE&lt;/version&gt;</span><br><span class="line">&lt;/parent&gt;</span><br></pre></td></tr></table></figure></p>
 <p>这个例子中使用了config client和eureka。当然了，通过改变artifactId也可以轻松导入其他的功能依赖。<br>我们这样做的方式目前来说是最推荐的，通过依赖管理的方式，我们可以避免遇到更多的坑。</p>
 <h1 id="有啥特性呢"><a href="#有啥特性呢" class="headerlink" title="有啥特性呢"></a>有啥特性呢</h1><p>Spring Cloud针对分布式系统设计中典型的用例提供了非常漂亮的开箱即用实现。对于其他不常用的应用场景，Spring Cloud也提供了一些扩展机制，我们可以轻松的搞掉这些场景。</p>
 <ul>
@@ -338,7 +613,7 @@ ps fauxwww --sort -rss |awk &apos;$1 ~ /(USER|td-agent)/ { print }&apos;
 <li>分布式选举和集群状态管理</li>
 <li>分布式消息</li>
 </ul>
-<p>Spring Cloud是通过声明似的方式来获取功能的支持的。通常来说，我们只需要改变相关的依赖，并且加上相关的注解，就可以获取对应的功能。<br>举例来说，在上面的依赖基础之上，我们定义一个具有服务注册和发现特性的应用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">@SpringBootApplication</div><div class="line">@EnableDiscoveryClient</div><div class="line">public class Application &#123;</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		SpringApplication.run(Application.class, args);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Spring Cloud是通过声明似的方式来获取功能的支持的。通常来说，我们只需要改变相关的依赖，并且加上相关的注解，就可以获取对应的功能。<br>举例来说，在上面的依赖基础之上，我们定义一个具有服务注册和发现特性的应用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@SpringBootApplication</span><br><span class="line">@EnableDiscoveryClient</span><br><span class="line">public class Application &#123;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		SpringApplication.run(Application.class, args);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h1 id="Spring-Cloud中的主要项目"><a href="#Spring-Cloud中的主要项目" class="headerlink" title="Spring Cloud中的主要项目"></a>Spring Cloud中的主要项目</h1><h2 id="Spring-Cloud-Config"><a href="#Spring-Cloud-Config" class="headerlink" title="Spring Cloud Config"></a>Spring Cloud Config</h2><p>主要解决外部配置管理的问题。可以通过Git来提供配置源。所有的配置资源会直接映射为Spring的环境变量。所有的配置可以通过http的方式进行访问，所以，对于异构语言平台来说也是一个福音。可以从统一的地方获取配置信息。</p>
 <h2 id="Spring-Cloud-Netflix"><a href="#Spring-Cloud-Netflix" class="headerlink" title="Spring Cloud Netflix"></a>Spring Cloud Netflix</h2><p>主要是为了方便与Netflix OSS的组件进行集成。比如说：Eureka，Hystrix，Zuul，Archaius等等。</p>
 <h2 id="Spring-Cloud-Bus"><a href="#Spring-Cloud-Bus" class="headerlink" title="Spring Cloud Bus"></a>Spring Cloud Bus</h2><p>提供了一个消息总线，用来为服务与服务实例之间进行分布式消息传递。当我们需要跨领域集群进行状态交互是非常有用的。比如说，如果配置中心配置发生变更后，会有变更事件通知给所有订阅配置服务的应用。这种变更事件就会通过事件总线来进行传输。</p>
@@ -359,6 +634,30 @@ ps fauxwww --sort -rss |awk &apos;$1 ~ /(USER|td-agent)/ { print }&apos;
 <h2 id="Spring-Cloud-Starters"><a href="#Spring-Cloud-Starters" class="headerlink" title="Spring Cloud Starters"></a>Spring Cloud Starters</h2><p>主要是为了使依赖管理做起来更加的容易。</p>
 <h2 id="Spring-Cloud-CLI"><a href="#Spring-Cloud-CLI" class="headerlink" title="Spring Cloud CLI"></a>Spring Cloud CLI</h2><p>一套命令行工具，可以轻松的基于groovy语言创建一些服务。</p>
 ]]></content>
+      
+        <categories>
+            
+            <category> spring cloud </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> spring cloud </tag>
+            
+            <tag> spring </tag>
+            
+            <tag> spring boot </tag>
+            
+            <tag> eureka </tag>
+            
+            <tag> netflix </tag>
+            
+            <tag> zuul </tag>
+            
+        </tags>
+        
     </entry>
     
     <entry>
@@ -376,8 +675,8 @@ ps fauxwww --sort -rss |awk &apos;$1 ~ /(USER|td-agent)/ { print }&apos;
 <li>分布式集群状态管理</li>
 </ul>
 <p>Spring Cloud是构建在Spring Boot的基础之上的。通过引入一大堆基于Spring Boot相关的依赖来为单独的一个应用提供对应的功能。我们可以利用Spring Cloud提供的基础实现快速体验一下，当然了，如果我们以后得心应手了，我们可以轻松的做出自己的解决方案，或者对默认方案做一些干预，以达到我们自己的目的。</p>
-<h1 id="愉快的开始吧"><a href="#愉快的开始吧" class="headerlink" title="愉快的开始吧"></a>愉快的开始吧</h1><p>先看一看这个POM文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">&lt;parent&gt;</div><div class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;1.3.7.RELEASE&lt;/version&gt;</div><div class="line">&lt;/parent&gt;</div><div class="line">&lt;dependencyManagement&gt;</div><div class="line">    &lt;dependencies&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;</div><div class="line">            &lt;version&gt;Brixton.SR6&lt;/version&gt;</div><div class="line">            &lt;type&gt;pom&lt;/type&gt;</div><div class="line">            &lt;scope&gt;import&lt;/scope&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">    &lt;/dependencies&gt;</div><div class="line">&lt;/dependencyManagement&gt;</div><div class="line">&lt;dependencies&gt;</div><div class="line">    &lt;dependency&gt;</div><div class="line">        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">        &lt;artifactId&gt;spring-cloud-starter-config&lt;/artifactId&gt;</div><div class="line">    &lt;/dependency&gt;</div><div class="line">    &lt;dependency&gt;</div><div class="line">        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">        &lt;artifactId&gt;spring-cloud-starter-eureka&lt;/artifactId&gt;</div><div class="line">    &lt;/dependency&gt;</div><div class="line">&lt;/dependencies&gt;</div></pre></td></tr></table></figure></p>
-<p>可以看到，我们只是依赖了一个“spring-cloud-dependencies”，其他的依赖都会在父依赖中体现，也就是在这里：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;parent&gt;</div><div class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;1.3.7.RELEASE&lt;/version&gt;</div><div class="line">&lt;/parent&gt;</div></pre></td></tr></table></figure></p>
+<h1 id="愉快的开始吧"><a href="#愉快的开始吧" class="headerlink" title="愉快的开始吧"></a>愉快的开始吧</h1><p>先看一看这个POM文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;parent&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;1.3.7.RELEASE&lt;/version&gt;</span><br><span class="line">&lt;/parent&gt;</span><br><span class="line">&lt;dependencyManagement&gt;</span><br><span class="line">    &lt;dependencies&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;Brixton.SR6&lt;/version&gt;</span><br><span class="line">            &lt;type&gt;pom&lt;/type&gt;</span><br><span class="line">            &lt;scope&gt;import&lt;/scope&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">    &lt;/dependencies&gt;</span><br><span class="line">&lt;/dependencyManagement&gt;</span><br><span class="line">&lt;dependencies&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;spring-cloud-starter-config&lt;/artifactId&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;spring-cloud-starter-eureka&lt;/artifactId&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">&lt;/dependencies&gt;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，我们只是依赖了一个“spring-cloud-dependencies”，其他的依赖都会在父依赖中体现，也就是在这里：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;parent&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;1.3.7.RELEASE&lt;/version&gt;</span><br><span class="line">&lt;/parent&gt;</span><br></pre></td></tr></table></figure></p>
 <p>这个例子中使用了config client和eureka。当然了，通过改变artifactId也可以轻松导入其他的功能依赖。<br>我们这样做的方式目前来说是最推荐的，通过依赖管理的方式，我们可以避免遇到更多的坑。</p>
 <h1 id="有啥特性呢"><a href="#有啥特性呢" class="headerlink" title="有啥特性呢"></a>有啥特性呢</h1><p>Spring Cloud针对分布式系统设计中典型的用例提供了非常漂亮的开箱即用实现。对于其他不常用的应用场景，Spring Cloud也提供了一些扩展机制，我们可以轻松的搞掉这些场景。</p>
 <ul>
@@ -391,7 +690,7 @@ ps fauxwww --sort -rss |awk &apos;$1 ~ /(USER|td-agent)/ { print }&apos;
 <li>分布式选举和集群状态管理</li>
 <li>分布式消息</li>
 </ul>
-<p>Spring Cloud是通过声明似的方式来获取功能的支持的。通常来说，我们只需要改变相关的依赖，并且加上相关的注解，就可以获取对应的功能。<br>举例来说，在上面的依赖基础之上，我们定义一个具有服务注册和发现特性的应用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">@SpringBootApplication</div><div class="line">@EnableDiscoveryClient</div><div class="line">public class Application &#123;</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		SpringApplication.run(Application.class, args);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Spring Cloud是通过声明似的方式来获取功能的支持的。通常来说，我们只需要改变相关的依赖，并且加上相关的注解，就可以获取对应的功能。<br>举例来说，在上面的依赖基础之上，我们定义一个具有服务注册和发现特性的应用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@SpringBootApplication</span><br><span class="line">@EnableDiscoveryClient</span><br><span class="line">public class Application &#123;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		SpringApplication.run(Application.class, args);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h1 id="Spring-Cloud中的主要项目"><a href="#Spring-Cloud中的主要项目" class="headerlink" title="Spring Cloud中的主要项目"></a>Spring Cloud中的主要项目</h1><h2 id="Spring-Cloud-Config"><a href="#Spring-Cloud-Config" class="headerlink" title="Spring Cloud Config"></a>Spring Cloud Config</h2><p>主要解决外部配置管理的问题。可以通过Git来提供配置源。所有的配置资源会直接映射为Spring的环境变量。所有的配置可以通过http的方式进行访问，所以，对于异构语言平台来说也是一个福音。可以从统一的地方获取配置信息。</p>
 <h2 id="Spring-Cloud-Netflix"><a href="#Spring-Cloud-Netflix" class="headerlink" title="Spring Cloud Netflix"></a>Spring Cloud Netflix</h2><p>主要是为了方便与Netflix OSS的组件进行集成。比如说：Eureka，Hystrix，Zuul，Archaius等等。</p>
 <h2 id="Spring-Cloud-Bus"><a href="#Spring-Cloud-Bus" class="headerlink" title="Spring Cloud Bus"></a>Spring Cloud Bus</h2><p>提供了一个消息总线，用来为服务与服务实例之间进行分布式消息传递。当我们需要跨领域集群进行状态交互是非常有用的。比如说，如果配置中心配置发生变更后，会有变更事件通知给所有订阅配置服务的应用。这种变更事件就会通过事件总线来进行传输。</p>
@@ -412,6 +711,30 @@ ps fauxwww --sort -rss |awk &apos;$1 ~ /(USER|td-agent)/ { print }&apos;
 <h2 id="Spring-Cloud-Starters"><a href="#Spring-Cloud-Starters" class="headerlink" title="Spring Cloud Starters"></a>Spring Cloud Starters</h2><p>主要是为了使依赖管理做起来更加的容易。</p>
 <h2 id="Spring-Cloud-CLI"><a href="#Spring-Cloud-CLI" class="headerlink" title="Spring Cloud CLI"></a>Spring Cloud CLI</h2><p>一套命令行工具，可以轻松的基于groovy语言创建一些服务。</p>
 ]]></content>
+      
+        <categories>
+            
+            <category> spring cloud </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> spring cloud </tag>
+            
+            <tag> spring </tag>
+            
+            <tag> spring boot </tag>
+            
+            <tag> eureka </tag>
+            
+            <tag> netflix </tag>
+            
+            <tag> zuul </tag>
+            
+        </tags>
+        
     </entry>
     
   
