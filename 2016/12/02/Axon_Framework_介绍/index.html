@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.8.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Axon Framework设计最初的想法，就是设计一个框架，能够帮助开发者解决应用的可扩展和可伸缩性，使开发者不用太关心太多的技术细节，而是把这些事情交由框架本身来关心。 背景历史随着时间的前行，我们发现，软件产品的需求，无论是功能性的还是非功能性的都在快速的增长。企业不再仅仅是通过宣传册来大力宣传业务，更希望他们的产品能够与业务与时俱进。这不仅仅意味着项目和代码可能会越来越复杂，更意味着软件的">
+<meta name="keywords" content="axon framework,event sourcing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Axon Framework 介绍">
+<meta property="og:url" content="http://yoursite.com/2016/12/02/Axon_Framework_介绍/index.html">
+<meta property="og:site_name" content="风中的少年">
+<meta property="og:description" content="Axon Framework设计最初的想法，就是设计一个框架，能够帮助开发者解决应用的可扩展和可伸缩性，使开发者不用太关心太多的技术细节，而是把这些事情交由框架本身来关心。 背景历史随着时间的前行，我们发现，软件产品的需求，无论是功能性的还是非功能性的都在快速的增长。企业不再仅仅是通过宣传册来大力宣传业务，更希望他们的产品能够与业务与时俱进。这不仅仅意味着项目和代码可能会越来越复杂，更意味着软件的">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="http://ogj4ygzvp.bkt.clouddn.com/note.png">
+<meta property="og:updated_time" content="2021-01-11T05:38:13.220Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Axon Framework 介绍">
+<meta name="twitter:description" content="Axon Framework设计最初的想法，就是设计一个框架，能够帮助开发者解决应用的可扩展和可伸缩性，使开发者不用太关心太多的技术细节，而是把这些事情交由框架本身来关心。 背景历史随着时间的前行，我们发现，软件产品的需求，无论是功能性的还是非功能性的都在快速的增长。企业不再仅仅是通过宣传册来大力宣传业务，更希望他们的产品能够与业务与时俱进。这不仅仅意味着项目和代码可能会越来越复杂，更意味着软件的">
+<meta name="twitter:image" content="http://ogj4ygzvp.bkt.clouddn.com/note.png">
+
+<link rel="canonical" href="http://yoursite.com/2016/12/02/Axon_Framework_介绍/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-cn'
+  };
+</script>
+
+  <title>Axon Framework 介绍 | 风中的少年</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="风中的少年" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">风中的少年</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-cn">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/02/Axon_Framework_介绍/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="皮亮">
+      <meta itemprop="description" content>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="风中的少年">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Axon Framework 介绍
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-12-02 10:35:15" itemprop="dateCreated datePublished" datetime="2016-12-02T10:35:15+08:00">2016-12-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-01-11 13:38:13" itemprop="dateModified" datetime="2021-01-11T13:38:13+08:00">2021-01-11</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Axon Framework设计最初的想法，就是设计一个框架，能够帮助开发者解决应用的可扩展和可伸缩性，使开发者不用太关心太多的技术细节，而是把这些事情交由框架本身来关心。</p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><h3 id="历史"><a href="#历史" class="headerlink" title="历史"></a>历史</h3><p>随着时间的前行，我们发现，软件产品的需求，无论是功能性的还是非功能性的都在快速的增长。企业不再仅仅是通过宣传册来大力宣传业务，更希望他们的产品能够与业务与时俱进。这不仅仅意味着项目和代码可能会越来越复杂，更意味着软件的功能设计要不断的增加、改变甚至移除。最令人心烦的是，有时候表面上看起来非常容易实现的一个特性，却需要开发团队对整个应用拆分和理解。而且，当今的网络应用的目标都是能应对几十亿的潜在用户，这就使得可扩展性成为一个不可争辩的一个需求。</p>
+<p>目前已经有很多的应用和框架在尝试解决应用的可扩展性问题，比如：GigaSpaces、Terracotta，但是这些框架有一个明显的问题，他们在尝试解决问题的同时，让开发者依然使用开发者熟悉的分层架构，在某些情况下，甚至限制和阻止开发者使用一个真正的域模型，强迫开发者将所有的业务逻辑放入业务层中。尽管这样做可以很快的搭建起一个应用，但是慢慢的会导致应用越来越复杂，开发越来越慢。</p>
+<p>Greg Young第一次提到了Command Query Responsiblity Segregation (CQRS)模式，通过改变应用的架构来解决这些问题。CQRS并不通过层来划分业务，而是基于读或者写来划分业务。这就意味着执行写的组件和执行读的组件是完全分开的。这样做的一个很重要的原因是应用的读和写对技术的或者是非技术的需求是完全不同的。Command执行后，查询组件会使用特定的事件进行同步或者异步的更新操作。正是这种通过事件更新的机制使得应用在框架上更容易延伸和扩展，最终也会更利于维护。</p>
+<blockquote>
+<p><img src="http://ogj4ygzvp.bkt.clouddn.com/note.png" alt>Note：这里我们不会花大部分时间来讲CQRS，如果你想更多的了解CQRS，可以访问这里：<a href="http://www.axonframework.org/" target="_blank" rel="noopener">www.axonframework.org</a>，这里有一些背景介绍的一些链接。</p>
+</blockquote>
+<p>可以看到，CQRS与我们当今主流的开发结构有很大的差距，自然就很难理解。对于开发者而言，学习使用这种架构走一些弯路就再正常不过了。这也正是Axon Framework诞生的初衷：帮助开发者轻松的事项CQRS模式，从而把更多的时间和精力花在实际业务上。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/axon-framework/" rel="tag"># axon framework</a>
+              <a href="/tags/event-sourcing/" rel="tag"># event sourcing</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/12/02/spring-cloud-dataflow-入门/" rel="prev" title="spring cloud dataflow 入门">
+      <i class="fa fa-chevron-left"></i> spring cloud dataflow 入门
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/12/09/Resizing a VirtualBox Virtual Machine (Debian) hard disk with LVM/" rel="next" title="Resizing a VirtualBox Virtual Machine (Debian) hard disk with LVM">
+      Resizing a VirtualBox Virtual Machine (Debian) hard disk with LVM <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#历史"><span class="nav-number">1.1.</span> <span class="nav-text">历史</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">皮亮</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">皮亮</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

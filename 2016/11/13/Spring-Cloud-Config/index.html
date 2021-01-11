@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.8.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="什么是Spring Cloud ConfigConfig主要是为了解决分布式应用中的配置管理问题。Spring Cloud Config对配置进行集中化管理，提供了Server端和Client端的解决方案。所有的应用和服务都可以通过Server端管理、访问自己的配置。而且，Server端的配置我们还可以通过版本管理工具管理起来。 为什么需要Config曾几何时，我们把配置直接硬编码到我们的代码中，">
+<meta name="keywords" content="spring cloud,config server,config client">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Cloud -- Config">
+<meta property="og:url" content="http://yoursite.com/2016/11/13/Spring-Cloud-Config/index.html">
+<meta property="og:site_name" content="风中的少年">
+<meta property="og:description" content="什么是Spring Cloud ConfigConfig主要是为了解决分布式应用中的配置管理问题。Spring Cloud Config对配置进行集中化管理，提供了Server端和Client端的解决方案。所有的应用和服务都可以通过Server端管理、访问自己的配置。而且，Server端的配置我们还可以通过版本管理工具管理起来。 为什么需要Config曾几何时，我们把配置直接硬编码到我们的代码中，">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="http://ogj4ygzvp.bkt.clouddn.com/SPRING%20INITIALIZR%20.png">
+<meta property="og:image" content="http://ogj4ygzvp.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-11-13%20%E4%B8%8B%E5%8D%885.15.31.png">
+<meta property="og:image" content="http://ogj4ygzvp.bkt.clouddn.com/config%20server%20enable.png">
+<meta property="og:image" content="http://ogj4ygzvp.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-11-13%20%E4%B8%8B%E5%8D%887.15.42.png">
+<meta property="og:image" content="http://ogj4ygzvp.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-11-13%20%E4%B8%8B%E5%8D%885.28.42.png">
+<meta property="og:image" content="http://ogj4ygzvp.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-11-13%20%E4%B8%8B%E5%8D%885.31.48.png">
+<meta property="og:image" content="http://ogj4ygzvp.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-11-13%20%E4%B8%8B%E5%8D%887.32.28.png">
+<meta property="og:updated_time" content="2021-01-11T05:38:13.223Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring Cloud -- Config">
+<meta name="twitter:description" content="什么是Spring Cloud ConfigConfig主要是为了解决分布式应用中的配置管理问题。Spring Cloud Config对配置进行集中化管理，提供了Server端和Client端的解决方案。所有的应用和服务都可以通过Server端管理、访问自己的配置。而且，Server端的配置我们还可以通过版本管理工具管理起来。 为什么需要Config曾几何时，我们把配置直接硬编码到我们的代码中，">
+<meta name="twitter:image" content="http://ogj4ygzvp.bkt.clouddn.com/SPRING%20INITIALIZR%20.png">
+
+<link rel="canonical" href="http://yoursite.com/2016/11/13/Spring-Cloud-Config/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-cn'
+  };
+</script>
+
+  <title>Spring Cloud -- Config | 风中的少年</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="风中的少年" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">风中的少年</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-cn">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/13/Spring-Cloud-Config/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="皮亮">
+      <meta itemprop="description" content>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="风中的少年">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Spring Cloud -- Config
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-11-13 15:58:57" itemprop="dateCreated datePublished" datetime="2016-11-13T15:58:57+08:00">2016-11-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-01-11 13:38:13" itemprop="dateModified" datetime="2021-01-11T13:38:13+08:00">2021-01-11</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="什么是Spring-Cloud-Config"><a href="#什么是Spring-Cloud-Config" class="headerlink" title="什么是Spring Cloud Config"></a>什么是Spring Cloud Config</h2><p>Config主要是为了解决分布式应用中的配置管理问题。Spring Cloud Config对配置进行集中化管理，提供了Server端和Client端的解决方案。所有的应用和服务都可以通过Server端管理、访问自己的配置。而且，Server端的配置我们还可以通过<code>版本管理工具</code>管理起来。</p>
+<h2 id="为什么需要Config"><a href="#为什么需要Config" class="headerlink" title="为什么需要Config"></a>为什么需要Config</h2><p>曾几何时，我们把配置直接硬编码到我们的代码中，中途我们发现，配置一遍，我们就要改代码，重新构建工程，重新部署。于是我们聪明了一些，把配置写到配置文件中，这样不用改代码了，不用重新构建工程，但是依然不是那么愉快，我们还是要重新部署应用来使新的配置生效。好吧，我姑且接受这个现实吧。。。</p>
+<p>突然有一天，我们发现，为了应对日益增长的访问量，一不小心，一盒应用我们部署了很多实例。。。别太美，我们发现改配置的话好麻烦啊，因为每一个实例中对应的配置都要修改，重新打包，重启。。。</p>
+<p>突然，背后一阵凉风。。。ʘ‿ʘ</p>
+<p>多么希望能有一个统一的地方用来管理配置。。。暂时就这么点需求。</p>
+<p>好吧，Spring Cloud Config来满足你。</p>
+<h2 id="简单搭建一个Config-Server"><a href="#简单搭建一个Config-Server" class="headerlink" title="简单搭建一个Config Server"></a>简单搭建一个Config Server</h2><ol>
+<li>打开<a href="https://start.spring.io/" target="_blank" rel="noopener">SPRING INITIALIZR</a><br><img src="http://ogj4ygzvp.bkt.clouddn.com/SPRING%20INITIALIZR%20.png" alt></li>
+<li>添加了Config Server的依赖</li>
+<li>点击：Generate Project</li>
+<li>解压产生的项目，看一下项目结构：<br><img src="http://ogj4ygzvp.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-11-13%20%E4%B8%8B%E5%8D%885.15.31.png" alt></li>
+<li>编辑DemoApplication.java,划线的地方是新加入的<br><img src="http://ogj4ygzvp.bkt.clouddn.com/config%20server%20enable.png" alt></li>
+<li>resources下加入：bootstrap.yml</li>
+</ol>
+<ul>
+<li>配置config server使用本地配置提供服务，具体配置如下：<br><img src="http://ogj4ygzvp.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-11-13%20%E4%B8%8B%E5%8D%887.15.42.png" alt></li>
+</ul>
+<ol start="4">
+<li>resources下加入<code>conf</code>文件夹，建立application.yml文件，加入如下内容：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">application:</span><br><span class="line">  name: mittyok-test</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>在目录下执行：<code>./mvnw package</code></li>
+<li>到<code>target</code>目录下面</li>
+<li><img src="http://ogj4ygzvp.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-11-13%20%E4%B8%8B%E5%8D%885.28.42.png" alt></li>
+<li>执行命令<br><code>java -jar demo-0.0.1-SNAPSHOT.jar</code><br><br>我们等待着。。。<br><img src="http://ogj4ygzvp.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-11-13%20%E4%B8%8B%E5%8D%885.31.48.png" alt><br>看到上面这个输出，应该已经启动OK。</li>
+</ol>
+<h2 id="验证Config-Server-OK"><a href="#验证Config-Server-OK" class="headerlink" title="验证Config Server OK"></a>验证Config Server OK</h2><p>我们上面在conf中只放入了一个application.yml文件，这个文件的配置会默认对所有应用有效，我们看一下刚才我们的配置是否被Config Server读取：</p>
+<p>访问：<code>http://localhost:8080/application-defualt.yml</code><br>如果能看到如下结果，说明Server已经启动成功啦：</p>
+<p><img src="http://ogj4ygzvp.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-11-13%20%E4%B8%8B%E5%8D%887.32.28.png" alt></p>
+<h2 id="搭建一个简单的Config-Client"><a href="#搭建一个简单的Config-Client" class="headerlink" title="搭建一个简单的Config Client"></a>搭建一个简单的Config Client</h2><h2 id="Config监控"><a href="#Config监控" class="headerlink" title="Config监控"></a>Config监控</h2><p>有时候我们需要在修改配置后，相关的客户端要refresh，重新加载配置。这个时候，我们需要用到Spring<br>Cloud Bus, Bus负责将Config Server端的事件广播到对应的应用，使应用重新加载配置。</p>
+<ul>
+<li><p>假设，我们我们通过rabbit作为消息中间件，bus的事件广播渠道，则Config Server端我们需要如下配置：</p>
+<p>  <strong>pom.xml</strong></p>
+</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 通过此消息中间件广播 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-stream-rabbit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0.2.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 事件总线，监听及处理cloud中的一些事件，如通过/monitor传入的操作 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-bus<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 使服务暴露/monitor endpoint 以方便外部触发监听事件 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-config-monitor<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1.2.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>bootstrap.yml</strong></p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  rabbitmq:</span></span><br><span class="line"><span class="attr">    addresses:</span> <span class="number">192.168</span><span class="number">.99</span><span class="number">.100</span><span class="string">:5672</span> <span class="comment"># rabbitmq地址</span></span><br><span class="line"><span class="attr">    username:</span> <span class="string">admin</span> <span class="comment"># 用户名</span></span><br><span class="line"><span class="attr">    password:</span> <span class="string">admin</span> <span class="comment"># 密码</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>Config Client端与服务端配置基本一致，但是不需要暴露/monitor endpoint</li>
+</ul>
+<blockquote>
+<blockquote>
+<p><em>注意：</em>两端的事件实体与Json的转换规则上一定要一致，不要出现客户端转化成的json使用hyphon格式（”<code>-</code>“），而服务端用camelcase的形式读取，类似这样的问题。</p>
+</blockquote>
+</blockquote>
+<h2 id="待续"><a href="#待续" class="headerlink" title="待续"></a>待续</h2>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/spring-cloud/" rel="tag"># spring cloud</a>
+              <a href="/tags/config-server/" rel="tag"># config server</a>
+              <a href="/tags/config-client/" rel="tag"># config client</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/10/01/Log4jdbc-Guide/" rel="prev" title="Log4jdbc-Guide">
+      <i class="fa fa-chevron-left"></i> Log4jdbc-Guide
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/11/16/Schema-Generator-By-JPA/" rel="next" title="Schema-Generator-By-JPA">
+      Schema-Generator-By-JPA <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是Spring-Cloud-Config"><span class="nav-number">1.</span> <span class="nav-text">什么是Spring Cloud Config</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么需要Config"><span class="nav-number">2.</span> <span class="nav-text">为什么需要Config</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单搭建一个Config-Server"><span class="nav-number">3.</span> <span class="nav-text">简单搭建一个Config Server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#验证Config-Server-OK"><span class="nav-number">4.</span> <span class="nav-text">验证Config Server OK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建一个简单的Config-Client"><span class="nav-number">5.</span> <span class="nav-text">搭建一个简单的Config Client</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Config监控"><span class="nav-number">6.</span> <span class="nav-text">Config监控</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#待续"><span class="nav-number">7.</span> <span class="nav-text">待续</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">皮亮</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">皮亮</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
